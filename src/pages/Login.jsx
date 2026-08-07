@@ -61,19 +61,21 @@ function Login() {
   // 다시 수정하면 checkedEmail이 더 이상 form.email과 일치하지 않으므로 자동으로
   // "재확인 필요" 상태가 된다(별도 초기화 로직 불필요).
   const [emailCheck, setEmailCheck] = useState({ checkedEmail: '', available: null })
+  const [submitting, setSubmitting] = useState(false)
 
   function handleChange(e) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  function handleEmailCheck() {
+  async function handleEmailCheck() {
     setError('')
     if (!EMAIL_PATTERN.test(form.email)) {
       setEmailCheck({ checkedEmail: '', available: null })
       setError('올바른 이메일 형식을 입력해주세요.')
       return
     }
-    setEmailCheck({ checkedEmail: form.email, available: !isEmailTaken(form.email) })
+    const taken = await isEmailTaken(form.email)
+    setEmailCheck({ checkedEmail: form.email, available: !taken })
   }
 
   const emailIsChecked = emailCheck.checkedEmail === form.email && emailCheck.available !== null
@@ -100,7 +102,7 @@ function Login() {
       })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError('')
 
@@ -119,10 +121,11 @@ function Login() {
       }
     }
 
+    setSubmitting(true)
     const result =
       mode === 'login'
-        ? login(form.email, form.password)
-        : register(form.email, form.password, form.name, {
+        ? await login(form.email, form.password)
+        : await register(form.email, form.password, form.name, {
             birthDate: form.birthDate,
             gender: form.gender,
             phone: form.phone,
@@ -132,6 +135,7 @@ function Login() {
               detail: form.addressDetail,
             },
           })
+    setSubmitting(false)
 
     if (!result.success) {
       setError(result.message)
@@ -300,8 +304,8 @@ function Login() {
 
           {error && <p className="login__error">{error}</p>}
 
-          <button className="btn btn--primary" type="submit">
-            {mode === 'login' ? '로그인' : '회원가입'}
+          <button className="btn btn--primary" type="submit" disabled={submitting}>
+            {submitting ? '처리 중...' : mode === 'login' ? '로그인' : '회원가입'}
           </button>
         </form>
 
@@ -321,7 +325,7 @@ function Login() {
         </button>
 
         <p className="login__hint">
-          <span className="login__hint-title">테스트 계정 (비밀번호 모두 1234)</span>
+          <span className="login__hint-title">테스트 계정 (비밀번호 모두 123456)</span>
           지원자: <span className="login__hint-account">minji@example.com</span>
           <br />
           합격자(멘토 배정): <span className="login__hint-account">yuna@example.com</span>
