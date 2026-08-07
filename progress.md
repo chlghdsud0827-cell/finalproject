@@ -748,3 +748,10 @@ Playwright로 dev 서버를 직접 띄워 브라우저 시나리오를 재현하
 - 상단에 `role="tablist"` 탭 6개(요약 / 지원자 관리 / 강사・멘토 / 상담 관리 / 문의 관리 / 학원 일정) 신규 추가 — `MyPage.jsx`의 기존 탭 UI 패턴(밑줄 강조, `aria-selected`)을 그대로 재사용. 기존에 있던 8개 섹션(요약 통계・지원자 관리・강사 관리・멘토 현황・상담 매칭 모니터링・상담 신청 관리(비회원)・문의 관리・학원 일정 관리)을 성격이 비슷한 것끼리 묶어 6개 탭에 배정(강사 관리+멘토 현황 → "강사・멘토", 상담 매칭 모니터링+비회원 상담 신청 관리 → "상담 관리").
 - 어제 추가했던 "요약 통계 카드 클릭 시 `scrollIntoView`로 해당 섹션까지 스크롤" 기능은, 이제 섹션들이 다른 탭에 숨겨져 있어 스크롤만으로는 보이지 않으므로 **클릭 시 해당 탭으로 전환**하도록 동작을 변경(관련 `ref` 4개와 `scrollToSection` 함수는 제거, `setActiveTab` 호출로 교체). 학원 일정 관리 탭 안에서 "수정" 클릭 시 폼으로 스크롤하던 기능은 같은 탭 내부 이동이라 기존 그대로 유지.
 - `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 `/admin`의 탭 6개를 각각 눌러 해당 섹션들이 올바르게 나오는지, "요약" 탭의 통계 카드 클릭 시 맞는 탭으로 전환되는지 직접 확인 필요.
+
+## 첫 GitHub 푸시 + Vercel 프로덕션 배포 (2026-08-07)
+
+1. **GitHub 첫 커밋 + 푸시 — 완료**: 이 프로젝트는 지금까지 로컬에서만 작업해 커밋 이력이 전혀 없었음. `reference/`(원본 이미지, 약 96MB)는 저장소에 올릴지 사용자에게 확인 후 **제외하기로 결정**(`.gitignore`에 추가 — 실제 서비스에 쓰이는 이미지는 이미 `public/images/`에 다 복사되어 있어 앱 동작에는 영향 없음). 기본 브랜치명을 `master`→`main`으로 변경(GitHub 원격 저장소가 완전히 비어 있어 브랜치명 제약 없음, 최신 관례에 맞춤). 198개 파일을 최초 커밋으로 묶어 `https://github.com/chlghdsud0827-cell/finalproject.git`의 `main` 브랜치로 푸시 완료.
+2. **Vercel 프로덕션 배포 — 완료**: 기존에 연결되어 있던 Vercel 프로젝트(`ui-ux-course-site`)로 `vercel deploy --prod` 실행(첫 시도는 업로드 중 네트워크 오류로 실패, 재시도 후 성공). 배포 URL: `https://ui-ux-course-site.vercel.app`.
+3. **(발견) Vercel 프로덕션에 환경변수가 하나도 설정되어 있지 않음**: `vercel env ls production` 확인 결과 환경변수가 0개 — 로컬 `.env.local`의 `VITE_KAKAO_MAP_APP_KEY`는 git에 포함되지 않는 게 정상(보안상 당연함)이지만, **Vercel 프로젝트 자체에도 별도로 등록되어 있지 않아서 배포된 사이트의 `/location`・`/branches` 페이지는 실제 카카오맵 대신 placeholder("지도 영역")로 보임**. 실제 지도를 띄우려면 Vercel 대시보드(Settings → Environment Variables)에 `VITE_KAKAO_MAP_APP_KEY`를 직접 등록하고 재배포해야 함(키 값은 민감정보라 이 환경에서 자동으로 처리하지 않음).
+- 배포된 사이트에서 로그인(테스트 계정), 지원, 상담 신청 등 핵심 플로우가 실제로 동작하는지, 그리고 `/location`・`/branches`의 지도 placeholder 노출을 직접 확인 권장.
