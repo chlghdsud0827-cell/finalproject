@@ -1,0 +1,257 @@
+.mypage {
+  flex: 1;
+}
+
+.mypage__inner {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.mypage__profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: var(--color-card);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+}
+
+.mypage__profile-avatar {
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mypage__profile-name {
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mypage__profile-email {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.mypage__mentors-section {
+  margin-top: 1.5rem;
+}
+
+.mypage__mentors-section h2 {
+  font-size: 1.0625rem;
+  margin: 0 0 0.75rem;
+}
+
+.mypage__mentor-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mypage__mentor-card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.mypage__mentor-avatar {
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mypage__mentor-avatar--img {
+  object-fit: cover;
+}
+
+.mypage__mentor-avatar--letter {
+  background: linear-gradient(135deg, #1f6650, #123d31);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.mypage__mentor-body {
+  flex: 1 1 12rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mypage__mentor-name {
+  margin: 0;
+  font-weight: 700;
+}
+
+.mypage__mentor-title {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-badge-waiting-text);
+}
+
+.mypage__mentor-specialties {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mypage__mentor-specialties li {
+  background: var(--color-badge-success-bg);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  padding: 0.25em 0.7em;
+  border-radius: 999px;
+}
+
+.mypage__mentor-status {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.mypage__mentor-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.mypage__mentor-actions .btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .mypage__mentor-actions {
+    width: 100%;
+  }
+
+  .mypage__mentor-actions .btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+.mypage__stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.mypage__stat-card {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mypage__stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.mypage__stat-label {
+  font-size: 0.75rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.mypage__tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-badge-waiting-bg);
+  margin: 1.5rem 0;
+}
+
+.mypage__tab {
+  background: none;
+  border: none;
+  padding: 0.6em 0.25em;
+  margin-right: 1rem;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-badge-waiting-text);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.mypage__tab--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.mypage__empty {
+  color: var(--color-badge-waiting-text);
+}
+
+.mypage__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mypage__item {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mypage__title {
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+}
+
+.mypage__content {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.mypage__mentor {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}

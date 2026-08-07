@@ -1,0 +1,163 @@
+:root {
+  /* 색상 토큰 (progress.md 디자인 가이드) */
+  --color-bg: #f7f8f6;
+  --color-card: #ffffff;
+  --color-text: #1c2321;
+  --color-primary: #1f6650;
+  --color-primary-dark: #164c3c;
+
+  /* 상태 뱃지 색상 */
+  --color-badge-waiting-bg: #e5e7eb;
+  --color-badge-waiting-text: #4b5563;
+  --color-badge-success-bg: #e6f0ec;
+  --color-badge-success-text: var(--color-primary);
+  --color-badge-cancel-bg: #f6e7e4;
+  --color-badge-cancel-text: #b24b3f;
+
+  /* 폰트 */
+  --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont,
+    'Malgun Gothic', sans-serif;
+
+  /* 그림자・트랜지션 토큰 — 카드류에 공통 적용해 깊이감과 호버 반응을 통일한다 */
+  --shadow-card: 0 2px 8px rgba(28, 35, 33, 0.06), 0 1px 2px rgba(28, 35, 33, 0.08);
+  --shadow-card-hover: 0 12px 28px rgba(28, 35, 33, 0.14), 0 2px 6px rgba(28, 35, 33, 0.08);
+  --shadow-btn: 0 2px 8px rgba(31, 102, 80, 0.28);
+  --shadow-btn-hover: 0 6px 16px rgba(31, 102, 80, 0.34);
+  --transition-base: 0.2s ease;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  margin: 0 0 0.5em;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 상태 뱃지 공통 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.25em 0.75em;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.badge--waiting {
+  background: var(--color-badge-waiting-bg);
+  color: var(--color-badge-waiting-text);
+}
+
+.badge--success {
+  background: var(--color-badge-success-bg);
+  color: var(--color-badge-success-text);
+}
+
+.badge--cancel {
+  background: var(--color-badge-cancel-bg);
+  color: var(--color-badge-cancel-text);
+}
+
+/* 버튼 공통 */
+.btn {
+  padding: 0.65em 1.5em;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    background-color var(--transition-base);
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, #23785f, var(--color-primary) 55%, var(--color-primary-dark));
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+}
+
+.btn--primary:hover {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark) 55%, #123a2e);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-btn);
+}
+
+.btn--secondary {
+  background: var(--color-card);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn--secondary:hover {
+  background: var(--color-badge-success-bg);
+  transform: translateY(-1px);
+}
+
+.btn--secondary:active {
+  transform: translateY(0);
+}

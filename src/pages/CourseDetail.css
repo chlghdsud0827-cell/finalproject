@@ -1,0 +1,400 @@
+.course-detail {
+  flex: 1;
+}
+
+.course-detail__hero {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 3rem;
+  text-align: center;
+}
+
+.course-detail__badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.course-detail__hero h1 {
+  margin: 1rem 0 0.75rem;
+}
+
+.course-detail__hero p {
+  color: var(--color-badge-waiting-text);
+  margin-bottom: 1.5rem;
+}
+
+.course-detail__status {
+  color: var(--color-text);
+}
+
+.course-detail__stats {
+  background: linear-gradient(120deg, #123d31, #1f6650 55%, #1a5645);
+  margin-top: 2rem;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  text-align: center;
+}
+
+.course-detail__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.course-detail__stat strong {
+  font-size: 1.625rem;
+  font-weight: 700;
+  background: linear-gradient(120deg, #fff, #ffe08a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.course-detail__stat span {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 640px) {
+  .course-detail__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.course-detail__gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.course-detail__gate .course-detail__status {
+  margin-bottom: 0;
+}
+
+.course-detail__section {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 0;
+}
+
+.course-detail__section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+/* 모집요강 */
+.course-detail__overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.course-detail__overview-card {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.course-detail__overview-card dt {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.35rem;
+}
+
+.course-detail__overview-card dd {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+/* 이런 걸 배워요 */
+.course-detail__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.course-detail__skill-tag {
+  background: var(--color-badge-success-bg);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.5em 1em;
+  border-radius: 999px;
+}
+
+/* 실무에서 쓰는 AI 툴 */
+.course-detail__ai-intro {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 1.25rem;
+}
+
+.course-detail__ai-intro-media {
+  flex: 0 0 auto;
+  width: 400px;
+  height: 300px;
+  max-width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.course-detail__ai-intro-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.course-detail__ai-intro-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #123d31, #1f6650 55%, #2a8a6b);
+}
+
+.course-detail__ai-intro-placeholder img {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.course-detail__ai-intro-body h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.0625rem;
+}
+
+.course-detail__ai-intro-body p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.course-detail__ai-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.course-detail__ai-tool-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.course-detail__ai-tool-logo {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.course-detail__ai-tool-logo--letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1f6650, #123d31);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.course-detail__ai-tool-card strong {
+  display: block;
+  font-size: 0.9375rem;
+}
+
+.course-detail__ai-tool-card > div > span {
+  font-size: 0.75rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.course-detail__ai-tool-card p {
+  margin: 0.3rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+@media (max-width: 640px) {
+  .course-detail__ai-intro {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .course-detail__ai-intro-media {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* 커리큘럼 */
+.course-detail__curriculum {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.course-detail__curriculum-item {
+  display: flex;
+  gap: 1.5rem;
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.course-detail__curriculum-period {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  background: var(--color-badge-success-bg);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  padding: 0.35em 0.85em;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.course-detail__curriculum-body h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.0625rem;
+}
+
+.course-detail__curriculum-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--color-badge-waiting-text);
+  font-size: 0.9375rem;
+}
+
+.course-detail__curriculum-topics li::before {
+  content: '· ';
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* 지원 자격 */
+.course-detail__requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.course-detail__requirements li {
+  padding-left: 1.4em;
+  position: relative;
+}
+
+.course-detail__requirements li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .course-detail__curriculum-item {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/* 다른 교육과정 */
+.course-detail__other-desc {
+  color: var(--color-badge-waiting-text);
+  margin: -0.5rem 0 1.25rem;
+}
+
+.course-detail__other-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.course-detail__other-card {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.course-detail__other-card h3 {
+  margin: 0.6rem 0 0.4rem;
+  font-size: 1.0625rem;
+}
+
+.course-detail__other-card p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.course-detail__other-dates {
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.course-detail__other-dates div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.course-detail__other-dates dt {
+  color: var(--color-badge-waiting-text);
+}
+
+.course-detail__other-dates dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: right;
+}
+
+.course-detail__other-card .course-detail__other-note {
+  margin-top: 0.6rem;
+  font-size: 0.8125rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}

@@ -1,0 +1,67 @@
+.history {
+  flex: 1;
+}
+
+.history__inner {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.history__desc {
+  color: var(--color-badge-waiting-text);
+  margin: 0.5rem 0 2.5rem;
+}
+
+.history__desc a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.history__timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.35rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.history__timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.3rem;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  background: var(--color-badge-waiting-bg);
+}
+
+.history__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.history__dot {
+  position: absolute;
+  left: -1.35rem;
+  top: 0.3rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-badge-success-bg);
+}
+
+.history__year {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.9375rem;
+}
+
+.history__desc-text {
+  font-size: 1rem;
+}

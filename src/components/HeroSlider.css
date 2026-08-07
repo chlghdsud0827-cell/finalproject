@@ -1,0 +1,172 @@
+.hero-slider {
+  max-width: 1440px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.hero-slider__viewport {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card-hover);
+}
+
+.hero-slider__track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.hero-slider__slide {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 100%;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 3rem 3rem 4.5rem;
+  color: #fff;
+}
+
+/* 단색 그라디언트 배경에 입체감을 주는 은은한 장식 블롭 */
+.hero-slider__slide::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -8%;
+  width: 24rem;
+  height: 24rem;
+  background: radial-gradient(circle, rgba(245, 184, 61, 0.18), transparent 70%);
+  pointer-events: none;
+}
+
+/* 실제 상세 이미지가 정해지기 전까지 브랜드 톤 그라디언트로 대체 */
+.hero-slider__slide:nth-child(5n + 1) {
+  background: linear-gradient(135deg, #1c2321, #1f6650);
+}
+.hero-slider__slide:nth-child(5n + 2) {
+  background: linear-gradient(135deg, #164c3c, #1c2321);
+}
+.hero-slider__slide:nth-child(5n + 3) {
+  background: linear-gradient(135deg, #1f6650, #0f2b22);
+}
+.hero-slider__slide:nth-child(5n + 4) {
+  background: linear-gradient(135deg, #123d31, #1c2321);
+}
+.hero-slider__slide:nth-child(5n + 5) {
+  background: linear-gradient(135deg, #1c2321, #123d31);
+}
+
+.hero-slider__eyebrow {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a8d9c8;
+}
+
+.hero-slider__title {
+  margin: 0;
+  font-size: 1.75rem;
+  white-space: pre-line;
+  line-height: 1.35;
+}
+
+.hero-slider__cta {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.6em 1.25em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background-color var(--transition-base), transform var(--transition-base);
+}
+
+.hero-slider__cta:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.hero-slider__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-base), transform var(--transition-base);
+}
+
+.hero-slider__arrow:hover {
+  background: rgba(0, 0, 0, 0.55);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.hero-slider__arrow--prev {
+  left: 1rem;
+}
+
+.hero-slider__arrow--next {
+  right: 1rem;
+}
+
+.hero-slider__controls {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+  font-size: 0.8125rem;
+}
+
+.hero-slider__count {
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-slider__play {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  transition: background-color var(--transition-base);
+}
+
+.hero-slider__play:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 640px) {
+  .hero-slider__slide {
+    padding: 2.5rem 1.5rem 3.5rem;
+  }
+  .hero-slider__title {
+    font-size: 1.375rem;
+  }
+}

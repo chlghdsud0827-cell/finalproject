@@ -1,0 +1,178 @@
+.home-promo-modal {
+  border: none;
+  border-radius: 22px;
+  padding: 0;
+  overflow: hidden;
+  max-width: 24rem;
+  width: calc(100% - 3rem);
+  box-shadow: 0 24px 64px rgba(18, 35, 33, 0.28);
+}
+
+.home-promo-modal::backdrop {
+  background: rgba(18, 35, 33, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+/* 다이얼로그가 열릴 때 살짝 떠오르며 나타나는 등장 효과 — showModal() 호출로
+   display:none → block 전환이 일어날 때마다 다시 재생된다. */
+.home-promo-modal[open] .home-promo-modal__content {
+  animation: home-promo-pop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes home-promo-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.home-promo-modal__content {
+  position: relative;
+  background: var(--color-card);
+  padding: 0.75rem 0.75rem 0;
+}
+
+.home-promo-modal__close {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  z-index: 1;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background-color var(--transition-base);
+}
+
+.home-promo-modal__close:hover {
+  background: #fff;
+}
+
+/* 사진은 카드 안에 여백을 두고 담아, 어두운 스크림 없이 원본 그대로 보이도록 한다. */
+.home-promo-modal__media {
+  position: relative;
+  aspect-ratio: 840 / 698;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.home-promo-modal__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.home-promo-modal__media-fallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #123d31, #1f6650 55%, #2a8a6b);
+}
+
+.home-promo-modal__tag {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.4em 0.85em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  backdrop-filter: blur(2px);
+}
+
+.home-promo-modal__body {
+  padding: 1.25rem 0.5rem 1.5rem;
+  text-align: center;
+}
+
+.home-promo-modal__body h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.3125rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.home-promo-modal__body > p {
+  margin: 0 0 1.1rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-badge-waiting-text);
+}
+
+.home-promo-modal__body .deadline-countdown {
+  margin-bottom: 1.25rem;
+  gap: 0.6em;
+}
+
+/* 시계 아이콘만 따로 떼어 시소를 타듯 좌우로 까닥이는 모션(팝업 한정) */
+.home-promo-modal__body .deadline-countdown__icon {
+  animation: home-promo-seesaw 1.4s ease-in-out infinite;
+  transform-origin: 50% 85%;
+}
+
+@keyframes home-promo-seesaw {
+  0%,
+  100% {
+    transform: rotate(-12deg);
+  }
+  50% {
+    transform: rotate(12deg);
+  }
+}
+
+.home-promo-modal__cta {
+  display: block;
+  width: 100%;
+  padding: 0.8em 1em;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #23785f, var(--color-primary) 55%, var(--color-primary-dark));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.home-promo-modal__cta:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-btn-hover);
+}
+
+.home-promo-modal__cta:active {
+  transform: translateY(0);
+}
+
+.home-promo-modal__links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.home-promo-modal__links button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-badge-waiting-text);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.home-promo-modal__links button:hover {
+  color: var(--color-text);
+}

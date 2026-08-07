@@ -1,0 +1,112 @@
+.partners {
+  flex: 1;
+}
+
+.partners__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.partners__inner > p {
+  color: var(--color-badge-waiting-text);
+  max-width: 40rem;
+}
+
+.partners__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.partners__card {
+  background: var(--color-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.partners__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.partners__logo {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.partners__logo--img {
+  background: var(--color-bg);
+  padding: 1rem;
+}
+
+.partners__logo--img img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.partners__logo--letter {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.partners__card:nth-of-type(3n + 1) .partners__logo--letter {
+  background: linear-gradient(135deg, #1f6650, #123d31);
+}
+.partners__card:nth-of-type(3n + 2) .partners__logo--letter {
+  background: linear-gradient(135deg, #164c3c, #1c2321);
+}
+.partners__card:nth-of-type(3n + 3) .partners__logo--letter {
+  background: linear-gradient(135deg, #1c2321, #1f6650);
+}
+
+.partners__body {
+  padding: 1.1rem 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.partners__industry {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.partners__name {
+  margin: 0;
+  font-size: 1.0625rem;
+}
+
+.partners__desc {
+  margin: 0.3rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.partners__fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.partners__fields li {
+  background: var(--color-badge-success-bg);
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25em 0.7em;
+  border-radius: 999px;
+}

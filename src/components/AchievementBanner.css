@@ -1,0 +1,84 @@
+.achievement-banner {
+  background: linear-gradient(120deg, #123d31, #1f6650 55%, #1a5645);
+  margin-top: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 단색 배경에 입체감을 주는 은은한 장식 블롭 */
+.achievement-banner::before {
+  content: '';
+  position: absolute;
+  top: -70%;
+  right: -8%;
+  width: 22rem;
+  height: 22rem;
+  background: radial-gradient(circle, rgba(245, 184, 61, 0.22), transparent 70%);
+  pointer-events: none;
+}
+
+/* 배경이 단조로워 보인다는 피드백 반영 — 반대편에 은은한 두 번째 광원 +
+   전체에 아주 옅은 점 격자 패턴을 깔아 밋밋한 단색 면에 질감을 더한다. */
+.achievement-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 115%, rgba(245, 184, 61, 0.14), transparent 55%),
+    radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size:
+    auto,
+    20px 20px;
+  pointer-events: none;
+}
+
+.achievement-banner__list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.achievement-banner__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.achievement-banner__icon {
+  width: 0.85em;
+  height: 0.85em;
+  object-fit: contain;
+  margin-right: 0.3em;
+  /* 검정 라인 아이콘을 딥그린 배경 위에서 보이도록 흰색으로 반전 */
+  filter: brightness(0) invert(1);
+}
+
+.achievement-banner__value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.625rem;
+  font-weight: 700;
+  background: linear-gradient(120deg, #fff, #ffe08a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.achievement-banner__label {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 640px) {
+  .achievement-banner__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

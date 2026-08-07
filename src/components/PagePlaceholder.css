@@ -1,0 +1,21 @@
+.page-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+}
+
+.page-placeholder__inner {
+  max-width: 32rem;
+  text-align: center;
+}
+
+.page-placeholder__inner h1 {
+  color: var(--color-primary);
+}
+
+.page-placeholder__inner p {
+  color: var(--color-badge-waiting-text);
+  margin: 0;
+}

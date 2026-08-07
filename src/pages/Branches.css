@@ -1,0 +1,44 @@
+.branches {
+  flex: 1;
+}
+
+.branches__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.branches__desc {
+  color: var(--color-badge-waiting-text);
+  max-width: 40rem;
+}
+
+.branches__desc a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.branches__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.branches__tab {
+  padding: 0.5em 1.1em;
+  border-radius: 999px;
+  border: 1px solid var(--color-badge-waiting-bg);
+  background: var(--color-card);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.branches__tab--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}

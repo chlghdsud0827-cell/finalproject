@@ -1,0 +1,90 @@
+.review-card {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.review-card__head {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.review-card__avatar {
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #1f6650, #123d31);
+}
+
+.review-card__name {
+  margin: 0;
+  font-size: 1.0625rem;
+}
+
+.review-card__cohort {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-badge-waiting-text);
+}
+
+.review-card__background {
+  margin: 0.2rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.review-card__hired {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.review-card__quote {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  border-left: 3px solid var(--color-primary);
+  padding-left: 0.9rem;
+}
+
+.review-card__interview summary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.review-card__qa {
+  margin: 0.9rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.review-card__qa-item dt {
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.review-card__qa-item dd {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-badge-waiting-text);
+}

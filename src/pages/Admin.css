@@ -1,0 +1,494 @@
+.admin {
+  flex: 1;
+}
+
+.admin__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.admin__section + .admin__section {
+  margin-top: 3rem;
+}
+
+.admin__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  border-bottom: 1px solid var(--color-badge-waiting-bg);
+  margin: 1.5rem 0 0;
+}
+
+.admin__tab {
+  background: none;
+  border: none;
+  padding: 0.7em 0.25em;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-badge-waiting-text);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.admin__tab--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.admin__tabs + .admin__section {
+  margin-top: 2rem;
+}
+
+.admin__section h2 {
+  font-size: 1.125rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.admin__desc {
+  color: var(--color-badge-waiting-text);
+  margin-bottom: 1.5rem;
+}
+
+/* 요약 통계 */
+.admin__summary-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin__stat-group-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-badge-waiting-text);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.admin__stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.admin__stat-card {
+  background: var(--color-card);
+  border: none;
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    box-shadow var(--transition-base),
+    transform var(--transition-base);
+}
+
+.admin__stat-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-1px);
+}
+
+.admin__stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.admin__stat-label {
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__stat-card--success .admin__stat-value {
+  color: var(--color-primary);
+}
+
+.admin__stat-card--waiting .admin__stat-value {
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__stat-card--cancel .admin__stat-value {
+  color: var(--color-badge-cancel-text);
+}
+
+/* 문의 관리 */
+.admin__inquiry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.admin__inquiry-item {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.admin__inquiry-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin__inquiry-title {
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+}
+
+.admin__inquiry-meta {
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__inquiry-content {
+  margin: 0.75rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.admin__inquiry-reply {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-bg);
+  border-radius: 8px;
+  border-left: 3px solid var(--color-primary);
+}
+
+.admin__inquiry-reply strong {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--color-primary);
+  margin-bottom: 0.35rem;
+}
+
+.admin__inquiry-reply p {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.admin__inquiry-reply-form {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.admin__inquiry-reply-form textarea {
+  flex: 1;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  padding: 0.6em 0.85em;
+  border-radius: 8px;
+  border: 1px solid var(--color-badge-waiting-bg);
+  background: var(--color-card);
+  color: var(--color-text);
+  resize: vertical;
+}
+
+.admin__inquiry-reply-form .btn {
+  align-self: flex-end;
+}
+
+.admin__contact-btn {
+  margin-top: 0.75rem;
+}
+
+.admin__callback-mentor {
+  margin-top: 0.75rem;
+}
+
+.admin__callback-mentor label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__callback-mentor select {
+  font-family: inherit;
+  padding: 0.35em 0.6em;
+  border-radius: 6px;
+  border: 1px solid var(--color-badge-waiting-bg);
+  background: var(--color-card);
+  color: var(--color-text);
+}
+
+@media (max-width: 640px) {
+  .admin__inquiry-reply-form {
+    flex-direction: column;
+  }
+
+  .admin__inquiry-reply-form .btn {
+    align-self: stretch;
+  }
+}
+
+.admin__bulk-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--color-card);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+.admin__bulk-actions label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__bulk-actions select {
+  font-family: inherit;
+  padding: 0.35em 0.6em;
+  border-radius: 6px;
+  border: 1px solid var(--color-badge-waiting-bg);
+  background: var(--color-card);
+  color: var(--color-text);
+}
+
+.admin__mentor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.admin__mentor-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.admin__mentor-specialties {
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__mentor-load {
+  margin-top: 0.3rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.9375rem;
+}
+
+.admin__instructor-title {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__mentor-roster {
+  margin: 0.5rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.8125rem;
+  color: var(--color-text);
+}
+
+.admin__mentor-roster li {
+  margin-bottom: 0.2rem;
+}
+
+.admin__mentor-roster-empty {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.admin__table th,
+.admin__table td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-badge-waiting-bg);
+  font-size: 0.9375rem;
+}
+
+.admin__table th {
+  color: var(--color-badge-waiting-text);
+  font-weight: 700;
+  font-size: 0.8125rem;
+}
+
+.admin__table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin__schedule-row--editing td {
+  background: var(--color-badge-success-bg);
+}
+
+.admin__schedule-row--editing td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.admin__table-content {
+  max-width: 220px;
+}
+
+.admin__table select {
+  font-family: inherit;
+  padding: 0.35em 0.6em;
+  border-radius: 6px;
+  border: 1px solid var(--color-badge-waiting-bg);
+  background: var(--color-card);
+  color: var(--color-text);
+}
+
+/* 모바일에서는 표를 카드형으로 전환 */
+@media (max-width: 640px) {
+  .admin__table thead {
+    display: none;
+  }
+
+  .admin__table,
+  .admin__table tbody,
+  .admin__table tr,
+  .admin__table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin__table tr {
+    padding: 0.75rem 1rem;
+    border-bottom: 8px solid var(--color-bg);
+  }
+
+  .admin__table td {
+    border: none;
+    padding: 0.3rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .admin__table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--color-badge-waiting-text);
+  }
+
+  .admin__table td.admin__table-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    max-width: none;
+  }
+}
+
+/* 학원 일정 관리 */
+.admin__schedule-form-wrap {
+  border-radius: 14px;
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.2s ease;
+  scroll-margin: 1.5rem;
+}
+
+.admin__schedule-form-wrap--editing {
+  box-shadow: 0 0 0 3px var(--color-primary);
+  border-radius: 14px;
+}
+
+.admin__schedule-editing-flag {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+  padding: 0.6rem 1rem;
+  background: var(--color-badge-success-bg);
+  color: var(--color-primary);
+  border-radius: 10px 10px 0 0;
+  font-size: 0.875rem;
+}
+
+.admin__schedule-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  align-items: end;
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.admin__schedule-form-wrap--editing .admin__schedule-form {
+  border-radius: 0 0 12px 12px;
+}
+
+.admin__schedule-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__schedule-form input,
+.admin__schedule-form select {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  padding: 0.5em 0.7em;
+  border-radius: 8px;
+  border: 1px solid var(--color-badge-waiting-bg);
+  background: var(--color-card);
+  color: var(--color-text);
+}
+
+.admin__schedule-form-actions {
+  display: flex;
+  gap: 0.5rem;
+  grid-column: 1 / -1;
+}
+
+.admin__schedule-row-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin__type-badge--recruiting {
+  background: var(--color-badge-success-bg);
+  color: var(--color-primary);
+}
+
+.admin__type-badge--course {
+  background: var(--color-badge-waiting-bg);
+  color: var(--color-badge-waiting-text);
+}
+
+.admin__type-badge--event {
+  background: #fdf1d8;
+  color: #a15c07;
+}

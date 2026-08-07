@@ -1,0 +1,62 @@
+.kakao-consult-modal {
+  border: none;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 24rem;
+  width: calc(100% - 3rem);
+  box-shadow: 0 12px 32px rgba(28, 35, 33, 0.25);
+}
+
+.kakao-consult-modal::backdrop {
+  background: rgba(28, 35, 33, 0.5);
+}
+
+.kakao-consult-modal__content {
+  position: relative;
+  background: var(--color-card);
+  color: var(--color-text);
+  padding: 2rem 1.75rem 1.75rem;
+  text-align: center;
+}
+
+.kakao-consult-modal__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--color-badge-waiting-text);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.kakao-consult-modal__icon {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 0.75rem;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.kakao-consult-modal__content h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+.kakao-consult-modal__content p {
+  margin: 0 0 1.25rem;
+  font-size: 0.9375rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.kakao-consult-modal__content .btn {
+  display: inline-flex;
+}
+
+.kakao-consult-modal__soon {
+  margin: 0;
+}

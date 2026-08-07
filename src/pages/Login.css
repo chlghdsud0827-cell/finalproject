@@ -1,0 +1,147 @@
+.login {
+  flex: 1;
+}
+
+.login__inner {
+  max-width: 24rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  text-align: center;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.login__form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+
+.login__form input {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  padding: 0.65em 0.85em;
+  border-radius: 8px;
+  border: 1px solid var(--color-badge-waiting-bg);
+  background: var(--color-card);
+  color: var(--color-text);
+}
+
+.login__form .btn {
+  margin-top: 0.5rem;
+}
+
+.login__gender {
+  display: flex;
+  gap: 1.5rem;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.login__gender legend {
+  width: 100%;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  margin-bottom: 0.4rem;
+  padding: 0;
+}
+
+.login__gender-option {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 400 !important;
+}
+
+.login__address-row,
+.login__email-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.login__address-row input,
+.login__email-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.login__address-row .btn,
+.login__email-row .btn {
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+.login__field-ok {
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--color-primary);
+}
+
+.login__field-error {
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--color-badge-cancel-text);
+}
+
+.login__address-line {
+  margin-top: 0.5rem;
+}
+
+.login__form input[readonly] {
+  background: var(--color-bg);
+  color: var(--color-badge-waiting-text);
+}
+
+.login__error {
+  margin: 0;
+  color: var(--color-badge-cancel-text);
+  font-size: 0.875rem;
+}
+
+.login__switch {
+  display: block;
+  width: 100%;
+  margin-top: 1.25rem;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.login__hint {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  background: var(--color-badge-success-bg);
+  border: 1px solid var(--color-primary);
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 0.9375rem;
+  line-height: 1.9;
+  text-align: left;
+}
+
+.login__hint-title {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+
+.login__hint-account {
+  font-weight: 700;
+}

@@ -1,0 +1,347 @@
+.schedule {
+  flex: 1;
+}
+
+.schedule__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.schedule__inner > p {
+  color: var(--color-badge-waiting-text);
+  max-width: 40rem;
+}
+
+/* 범례 */
+.schedule__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 1.25rem 0 2rem;
+}
+
+.schedule__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.schedule__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.schedule__dot--recruiting {
+  background: var(--color-primary);
+}
+
+.schedule__dot--course {
+  background: var(--color-badge-waiting-text);
+}
+
+.schedule__dot--event {
+  background: #d99a1f;
+}
+
+.schedule__dot--holiday {
+  background: #d1453b;
+}
+
+.schedule__legend--course {
+  margin-top: -1.25rem;
+  gap: 1rem;
+  font-size: 0.8125rem;
+}
+
+.schedule__legend--course .schedule__legend-item {
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+/* 월 이동 */
+.schedule__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.schedule__nav h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+/* 요일 헤더 */
+.schedule__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-badge-waiting-text);
+}
+
+/* 달력 그리드 */
+.schedule__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.schedule__cell {
+  /* min-width: 0이 없으면 줄바꿈 없는(white-space: nowrap) 일정 pill 텍스트의
+     내용 최소 크기가 그리드 트랙 계산에 그대로 반영되어, 긴 제목이 있는 날짜
+     칸의 열만 1fr보다 넓어지며 전체 격자가 요일 헤더보다 바깥으로 밀려났다. */
+  min-width: 0;
+  width: 100%;
+  min-height: 5.5rem;
+  background: var(--color-card);
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: inherit;
+  text-align: left;
+  cursor: default;
+  transition: box-shadow var(--transition-base);
+}
+
+/* 날짜 칸을 <button>으로 바꾸면서 생기는 기본 비활성 스타일(흐림 등)을 제거 —
+   일정이 없는 날은 그냥 클릭이 안 될 뿐, 시각적으로는 다른 날과 동일해야 한다. */
+.schedule__cell:disabled {
+  opacity: 1;
+}
+
+.schedule__cell--clickable {
+  cursor: pointer;
+}
+
+.schedule__cell--clickable:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.schedule__cell--empty {
+  background: transparent;
+  box-shadow: none;
+}
+
+.schedule__cell--today {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.schedule__date {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.schedule__date--holiday {
+  color: #d1453b;
+}
+
+.schedule__pills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.schedule__pill {
+  min-width: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.schedule__pill--recruiting {
+  background: var(--color-badge-success-bg);
+  color: var(--color-primary);
+}
+
+.schedule__pill--course {
+  background: var(--color-badge-waiting-bg);
+  color: var(--color-badge-waiting-text);
+}
+
+.schedule__pill--event {
+  background: #fdf1d8;
+  color: #a15c07;
+}
+
+.schedule__pill--holiday {
+  background: #fbe4e2;
+  color: #b83a30;
+}
+
+.schedule__pill--more {
+  background: transparent;
+  color: var(--color-badge-waiting-text);
+  padding: 0;
+}
+
+/* 과정별 구분용 색점 — pill(칸 안)과 하단 일정 목록 둘 다에서 재사용 */
+.schedule__pill-dot {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  margin-right: 0.3em;
+  vertical-align: middle;
+}
+
+@media (max-width: 640px) {
+  .schedule__cell {
+    min-height: 4rem;
+  }
+
+  .schedule__pill {
+    font-size: 0.5625rem;
+  }
+}
+
+/* 이번 달 일정 목록 */
+.schedule__list {
+  margin-top: 2.5rem;
+}
+
+.schedule__list h2 {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.schedule__list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.schedule__list li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: var(--color-card);
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  box-shadow: var(--shadow-card);
+}
+
+.schedule__list-date {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.schedule__badge--recruiting {
+  background: var(--color-badge-success-bg);
+  color: var(--color-primary);
+}
+
+.schedule__badge--course {
+  background: var(--color-badge-waiting-bg);
+  color: var(--color-badge-waiting-text);
+}
+
+.schedule__badge--event {
+  background: #fdf1d8;
+  color: #a15c07;
+}
+
+.schedule__badge--holiday {
+  background: #fbe4e2;
+  color: #b83a30;
+}
+
+.schedule__empty {
+  color: var(--color-badge-waiting-text);
+}
+
+/* 하루 일정 상세 모달 — 달력 칸에 pill이 3개 이상이라 "+N"으로 접힐 때,
+   칸을 클릭하면 그 날짜의 전체 일정을 볼 수 있도록 한다. */
+.schedule__day-modal {
+  border: none;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 26rem;
+  width: calc(100% - 3rem);
+  box-shadow: 0 12px 32px rgba(28, 35, 33, 0.25);
+}
+
+.schedule__day-modal::backdrop {
+  background: rgba(28, 35, 33, 0.5);
+}
+
+.schedule__day-modal-content {
+  position: relative;
+  background: var(--color-card);
+  color: var(--color-text);
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+.schedule__day-modal-content h2 {
+  margin: 0 0 1rem;
+  font-size: 1.0625rem;
+}
+
+.schedule__day-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--color-badge-waiting-text);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.schedule__day-modal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.schedule__day-modal-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.schedule__day-modal-list strong {
+  display: block;
+  font-size: 0.9375rem;
+}
+
+.schedule__day-modal-meta {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}

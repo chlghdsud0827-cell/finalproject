@@ -1,0 +1,51 @@
+// 취업 연계 파트너사 placeholder — 실제 파트너사가 확정되면 로고 이미지·소개로 교체
+export const partners = [
+  {
+    id: 1,
+    name: '테크노베이션',
+    industry: 'IT・SaaS',
+    description: 'B2B 협업 툴을 만드는 스타트업입니다. UI/UX 디자이너 신입 채용을 정기적으로 진행합니다.',
+    hiringFields: ['UI 디자이너', 'UX 리서처'],
+    logo: '/images/partners/technovation.jpg',
+  },
+  {
+    id: 2,
+    name: '브릿지웍스',
+    industry: '커머스',
+    description: '온라인 커머스 플랫폼을 운영하며, 매 분기 주니어 디자이너 채용 연계를 진행합니다.',
+    hiringFields: ['프로덕트 디자이너'],
+    logo: '/images/partners/bridgeworks.jpg',
+  },
+  {
+    id: 3,
+    name: '넥스트디자인',
+    industry: '디자인 에이전시',
+    description: '다양한 클라이언트의 웹/앱 프로젝트를 진행하는 에이전시로, 실무 인턴십 연계 기회가 많습니다.',
+    hiringFields: ['UI 디자이너', '인턴'],
+    logo: '/images/partners/nextdesign.jpg',
+  },
+  {
+    id: 4,
+    name: '픽셀크래프트',
+    industry: '게임・엔터테인먼트',
+    description: '모바일 게임 UI를 전문으로 하는 스튜디오입니다. 포트폴리오 기반 수시 채용을 진행합니다.',
+    hiringFields: ['게임 UI 디자이너'],
+    logo: '/images/partners/pixelcraft.jpg',
+  },
+  {
+    id: 5,
+    name: '스튜디오온',
+    industry: '핀테크',
+    description: '금융 서비스 앱을 만드는 핀테크 기업으로, UX 리서치 역량을 우대합니다.',
+    hiringFields: ['UX 디자이너', 'UX 리서처'],
+    logo: '/images/partners/studioon.jpg',
+  },
+  {
+    id: 6,
+    name: '메이커스랩',
+    industry: '헬스케어',
+    description: '헬스케어 플랫폼을 운영하며, 디자인 시스템 구축 경험이 있는 주니어를 선호합니다.',
+    hiringFields: ['프로덕트 디자이너'],
+    logo: '/images/partners/makerslab.jpg',
+  },
+]

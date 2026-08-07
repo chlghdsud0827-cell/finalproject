@@ -1,0 +1,160 @@
+.journey-graph {
+  background: linear-gradient(160deg, #10201b, #1c2321 55%, #123d31);
+  margin-top: 3rem;
+  padding: 3.5rem 1.5rem 4.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 배경이 단조로워 보인다는 피드백 반영 — 은은한 골드 광원 + 아주 옅은 점 격자
+   패턴으로 다른 어두운 배경 섹션(실적 배너 등)과 같은 질감 언어를 맞춘다. */
+.journey-graph::before {
+  content: '';
+  position: absolute;
+  top: -25%;
+  left: -8%;
+  width: 26rem;
+  height: 26rem;
+  background: radial-gradient(circle, rgba(245, 184, 61, 0.16), transparent 65%);
+  pointer-events: none;
+}
+
+.journey-graph::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 88% 20%, rgba(255, 255, 255, 0.07), transparent 55%),
+    radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size:
+    auto,
+    24px 24px;
+  pointer-events: none;
+}
+
+.journey-graph__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.journey-graph__eyebrow {
+  display: inline-block;
+  padding: 0.35em 1em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #a8d9c8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.journey-graph__title {
+  margin: 1rem 0 3rem;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.journey-graph__chart {
+  position: relative;
+  height: 340px;
+}
+
+.journey-graph__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.journey-graph__progress {
+  fill: none;
+  stroke: #f5b83d;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.journey-graph__marker {
+  fill: #fff;
+  stroke: transparent;
+  stroke-width: 3;
+  transition:
+    r 0.2s ease,
+    fill 0.2s ease,
+    stroke 0.2s ease;
+}
+
+.journey-graph__marker--active {
+  fill: #f5b83d;
+  stroke: #fff;
+}
+
+.journey-graph__step {
+  position: absolute;
+  width: 11rem;
+  text-align: left;
+  cursor: default;
+}
+
+.journey-graph__step--above {
+  transform: translate(-50%, calc(-100% - 1.25rem));
+}
+
+.journey-graph__step--below {
+  transform: translate(-50%, 1.25rem);
+}
+
+.journey-graph__step-badge {
+  display: inline-block;
+  padding: 0.2em 0.7em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.journey-graph__step-badge--active {
+  border-color: #f5b83d;
+  color: #f5b83d;
+}
+
+.journey-graph__step-title {
+  margin: 0 0 0.3rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.journey-graph__step-desc {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.8125rem;
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .journey-graph__chart {
+    height: auto;
+  }
+
+  .journey-graph__svg {
+    display: none;
+  }
+
+  .journey-graph__step {
+    position: static;
+    transform: none !important;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+}

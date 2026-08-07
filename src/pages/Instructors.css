@@ -1,0 +1,111 @@
+.instructors {
+  flex: 1;
+}
+
+.instructors__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.instructors__inner > p {
+  color: var(--color-badge-waiting-text);
+  max-width: 40rem;
+}
+
+.instructors__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.instructors__card {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  gap: 1.1rem;
+}
+
+.instructors__avatar {
+  flex: 0 0 auto;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.instructors__avatar--img {
+  object-fit: cover;
+}
+
+.instructors__avatar--letter {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.instructors__card:nth-of-type(4n + 1) .instructors__avatar--letter {
+  background: linear-gradient(135deg, #1f6650, #123d31);
+}
+.instructors__card:nth-of-type(4n + 2) .instructors__avatar--letter {
+  background: linear-gradient(135deg, #164c3c, #1c2321);
+}
+.instructors__card:nth-of-type(4n + 3) .instructors__avatar--letter {
+  background: linear-gradient(135deg, #1c2321, #1f6650);
+}
+.instructors__card:nth-of-type(4n + 4) .instructors__avatar--letter {
+  background: linear-gradient(135deg, #123d31, #1f6650);
+}
+
+.instructors__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.instructors__curriculum {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.instructors__name {
+  margin: 0;
+  font-size: 1.0625rem;
+}
+
+.instructors__title {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-badge-waiting-text);
+}
+
+.instructors__specialty {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.instructors__bio {
+  margin: 0.3rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.instructors__career {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.8125rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.instructors__career li {
+  margin-bottom: 0.2rem;
+}

@@ -1,0 +1,124 @@
+.career-support {
+  flex: 1;
+}
+
+.career-support__hero {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 1rem;
+  text-align: center;
+}
+
+.career-support__hero p {
+  color: var(--color-badge-waiting-text);
+  margin: 0.75rem 0 0;
+}
+
+.career-support__section {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 0;
+}
+
+.career-support__section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.career-support__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.career-support__step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: var(--color-card);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.career-support__step-num {
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.career-support__step-title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+}
+
+.career-support__step-desc {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.career-support__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.career-support__card {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.career-support__card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-badge-success-bg), #c9e4d8);
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.career-support__card-icon--img {
+  padding: 0.6rem;
+  object-fit: contain;
+}
+
+.career-support__card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.0625rem;
+}
+
+.career-support__card p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.career-support__more-desc {
+  max-width: 40rem;
+  margin: 2.5rem auto 0;
+  padding: 0 1.5rem;
+  color: var(--color-badge-waiting-text);
+}
+
+.career-support__more-desc a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
