@@ -830,3 +830,11 @@ Playwright로 dev 서버를 직접 띄워 브라우저 시나리오를 재현하
 4. 개인정보처리방침 페이지(`/privacy`, 현재 placeholder) — 보류 중
 5. 전체 브라우저 QA — 보류 중
 - 이번 대화에서 만든 변경사항은 마지막 GitHub 푸시(2026-08-07 이전 대화, 커밋 `43f1aab`) 이후 전부 로컬에만 있고 아직 커밋・푸시・배포되지 않음. 사용자 요청으로 지금 커밋・푸시・배포 진행.
+
+### 커밋・푸시・배포 완료
+- GitHub: 커밋 `2d7c0df` (`feat: Supabase Auth 연동 착수 + AI 툴 로고/오시는 길 좌표 정리`) → `main` 브랜치 푸시 완료.
+- Vercel 환경변수 3개 신규 등록(Production) — 이번에 처음 등록됨:
+  - `VITE_SUPABASE_URL`・`VITE_SUPABASE_ANON_KEY`: 등록해두지 않으면 Supabase 클라이언트가 프로덕션에서 초기화에 실패해 사이트 전체가 깨질 수 있어 배포 전 필수로 먼저 등록.
+  - `VITE_KAKAO_MAP_APP_KEY`: 이전 배포 때 발견했던 "프로덕션에 카카오맵 키가 없어 지도가 placeholder로 보이는" 문제를 이번에 함께 해결(로컬 `.env.local`에 있던 실제 키 값을 그대로 등록).
+- `vercel deploy --prod` 실행 → https://ui-ux-course-site.vercel.app 배포 완료, 접속 확인(200 OK).
+- **주의**: 배포된 사이트에서 로그인/회원가입을 시도하면, 아직 Supabase 대시보드 설정 3가지(SQL 실행・스키마 노출・이메일 확인 끄기)와 계정 시딩이 안 되어 있어 에러가 날 수 있음 — 위 "사용자가 할 일" 완료 후 정상 동작 예정.
