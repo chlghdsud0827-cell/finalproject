@@ -19,9 +19,9 @@ const NAV_GROUPS = [
     label: '소통공간',
     items: [
       { to: '/faq', label: '자주 묻는 질문' },
-      { to: '/consultation', label: '멘토 상담' },
       { to: '/inquiry', label: '문의하기' },
       { to: '/community', label: '커뮤니티' },
+      { to: '/notices', label: '공지사항' },
     ],
   },
   {
@@ -33,7 +33,6 @@ const NAV_GROUPS = [
       { to: '/instructors', label: '강사진 소개' },
       { to: '/mentors', label: '멘토 소개' },
       { to: '/schedule', label: '학원 일정' },
-      { to: '/notices', label: '공지사항' },
       { to: '/location', label: '오시는 길' },
       { to: '/branches', label: '다른 지점 안내' },
     ],

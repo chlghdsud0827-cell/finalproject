@@ -870,3 +870,16 @@ Playwright로 dev 서버를 직접 띄워 브라우저 시나리오를 재현하
 - GitHub: 커밋 `dcfe5d2` → `main` 브랜치 푸시 완료.
 - Vercel: `vercel deploy --prod` 실행 — 처음 두 번은 일시적 네트워크 오류(`Not authorized`, `fetch failed`)로 실패, 세 번째 재시도에서 성공. https://ui-ux-course-site.vercel.app 배포 완료, 접속 확인(200 OK).
 - 배포 대상에 포함된 것: 상담 분야 "기타" 추가, 이유나 계정 재연결, 멘토 상태 직접 수정 드롭다운, AI 인트로 이미지・Gemini 로고 교체, DB 연결 2단계 테이블/시드용 SQL 마이그레이션 파일 3개(실제 DB 반영은 Supabase 대시보드에서 별도로 이미 완료됨 — 이 커밋에 포함된 SQL 파일은 기록용).
+
+## DB 연결 2단계(지원) 완료: ApplicationContext.jsx 전환 (2026-08-10, 같은 날 후속 요청)
+
+1. **비로그인 방문자용 SELECT 정책 추가**: 과정 소개 페이지의 "정원 대비 확정" 배지는 로그인 여부와 무관하게 항상 보여야 하는데, 0003의 select 정책이 `authenticated` 전용이라 비로그인 상태에서는 지원 데이터가 하나도 안 보여 카운트가 항상 0으로 뜰 뻔했음 — `0005_academy_applications_anon_select.sql`로 `anon` 역할용 select 정책 추가.
+2. **`ApplicationContext.jsx`를 mock 배열 → Supabase로 전환 — 완료**: `AuthContext.jsx`와 동일한 패턴 — 실제 비동기인 부분(최초 조회, `applyToCourse`・`cancelApplication`・`adminUpdateApplicationStatus`)만 Supabase 호출로 바꾸고, 나머지 조회 함수(`getCourseWithCapacity`・`getMyApplications`・`getAllApplications`・`hasActiveApplication`)는 로컬 state를 읽는 동기 함수로 그대로 유지 — 그래서 `MyPage`・`Admin`・`CourseDetail`은 코드 수정이 전혀 필요 없었음. 더 이상 쓰이지 않는 `data/applications.js`(mock 시드 배열)는 삭제.
+3. **end-to-end 테스트 3가지 전부 성공**: ① 비로그인(anon) 상태로 정원 카운트 조회 → 19건 정상 조회 ② 김민지 계정으로 로그인해 실제 지원 생성 → 성공 ③ 본인 지원 내역 재조회 → 방금 만든 지원 건이 정확히 조회됨. 테스트로 만든 지원 데이터는 확인 후 바로 삭제해 김민지 계정을 원래의 백지 상태로 복원.
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 `/course`(정원 배지), 로그인해서 실제 지원 → `/mypage`에 반영되는지, `/admin`에서 상태 변경이 되는지 직접 확인 권장. 아직 커밋・푸시하지 않음.
+
+## 헤더 메뉴 개편 + 과정 소개 탭 분리 (2026-08-10, 같은 날 후속 요청)
+
+1. **소통공간 메뉴에서 "멘토 상담" 제거, "공지사항"을 학원안내→소통공간으로 이동 — 완료**: `Header.jsx`의 `NAV_GROUPS` 수정. "멘토 상담"(`/consultation`)은 메뉴에서만 빠졌을 뿐 페이지・기능은 그대로라, `/mentors`・과정 소개・`BottomCta` 등 기존 곳곳의 "상담 신청하기" 링크로는 여전히 접근 가능.
+2. **과정 소개(`/course`) 탭 분리 — 완료**: "국비교육과정 외 다른 과정 안내도 필요할 듯"이라는 요청으로, 상단에 4개 과정(국비 과정 포함) 탭을 추가해 전부 볼 수 있게 함. 국비 과정 탭은 기존 내용(모집요강・커리큘럼・지원 플로우 등) 그대로 유지. 나머지 3개 과정(UX 리서치 심화・프로덕트 디자인 부트캠프・디자인 시스템 마스터)은 여태 페이지 맨 아래 요약 카드로만 존재했던 것을 각자 전용 탭으로 승격 — `data/otherCourseDetails.js` 신규 작성해 과정별 "이런 걸 배워요"(스킬 태그)・간단한 커리큘럼 개요(국비 과정보다는 단계 수를 줄인 요약형)를 추가하고, 일정(진행기간・다음 기수 모집 예정)과 "모집이 시작되면 공지사항・학원 일정에서 안내" 문구를 표시(아직 모집 중이 아니라 지원 플로우는 없음). 기존에 페이지 맨 아래 있던 "다른 교육과정" 카드 그리드 섹션은 탭으로 대체되어 중복이라 제거.
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 `/course`의 탭 4개 전환, 헤더 "소통공간"에 멘토상담이 빠지고 공지사항이 들어왔는지 직접 확인 필요.
