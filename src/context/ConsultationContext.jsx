@@ -5,6 +5,7 @@ import { useAuth } from './AuthContext.jsx'
 const ConsultationContext = createContext(null)
 
 const ACTIVE_STATUSES = ['matched', 'in_progress']
+const MENTOR_EDITABLE_STATUSES = ['matched', 'in_progress', 'completed']
 
 export function ConsultationProvider({ children }) {
   const { currentUser } = useAuth()
@@ -80,6 +81,17 @@ export function ConsultationProvider({ children }) {
     )
   }, [])
 
+  // 멘토가 "수락"・"완료 처리" 버튼을 잘못 눌렀을 때 직접 되돌릴 수 있도록,
+  // matched・in_progress・completed 사이를 자유롭게 오갈 수 있게 하는 수동 보정
+  // 기능(요청 대기 상태로는 못 돌아가게 막음 — 배정 해제는 거절 버튼의 역할이라
+  // 여기서 같이 처리하면 mentorId가 붙은 채로 요청 대기 상태가 되는 모순이 생김).
+  const setConsultationStatus = useCallback((consultationId, status) => {
+    if (!MENTOR_EDITABLE_STATUSES.includes(status)) return
+    setConsultations((prev) =>
+      prev.map((c) => (c.id === consultationId ? { ...c, status } : c)),
+    )
+  }, [])
+
   // 멘토 거절: 배정을 풀고 관리자 수동 배정 대기(requested)로 되돌린다
   // (자동 재매칭 없음 — 다른 멘토 배정도 관리자가 직접 선택해야 한다).
   const declineConsultation = useCallback((consultationId) => {
@@ -108,6 +120,7 @@ export function ConsultationProvider({ children }) {
     completeConsultation,
     declineConsultation,
     adminAssignMentor,
+    setConsultationStatus,
   }
 
   return (

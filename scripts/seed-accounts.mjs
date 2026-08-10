@@ -36,21 +36,40 @@ const accounts = [
 ]
 
 for (const acc of accounts) {
-  const { data, error } = await supabase.auth.signUp({ email: acc.email, password: PASSWORD })
+  let userId
 
-  if (error) {
-    console.error(`[FAIL signUp] ${acc.email}: ${error.message}`)
-    continue
-  }
-  if (!data.user) {
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+    email: acc.email,
+    password: PASSWORD,
+  })
+
+  if (signUpError) {
+    // 재실행 시(이전 시도에서 auth 계정까지는 만들어졌던 경우) 이미 가입된
+    // 이메일이라는 에러가 나는데, 로그인해서 id만 다시 가져오면 안전하게 이어갈 수 있다.
+    if (!/already registered|already exists/i.test(signUpError.message)) {
+      console.error(`[FAIL signUp] ${acc.email}: ${signUpError.message}`)
+      continue
+    }
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      email: acc.email,
+      password: PASSWORD,
+    })
+    if (signInError) {
+      console.error(`[FAIL signIn(existing)] ${acc.email}: ${signInError.message}`)
+      continue
+    }
+    userId = signInData.user.id
+  } else if (!signUpData.user) {
     console.error(
       `[NEEDS EMAIL CONFIRM] ${acc.email}: Authentication 설정에서 "Confirm email"을 꺼주세요.`,
     )
     continue
+  } else {
+    userId = signUpData.user.id
   }
 
-  const { error: profileError } = await supabase.from('profiles').insert({
-    id: data.user.id,
+  const { error: profileError } = await supabase.from('profiles').upsert({
+    id: userId,
     email: acc.email,
     name: acc.name,
     role: acc.role,
@@ -63,6 +82,6 @@ for (const acc of accounts) {
     console.log(`[OK] ${acc.email} (${acc.name}, ${acc.role})`)
   }
 
-  // Supabase Auth의 signUp 연속 호출 rate limit을 피하기 위한 짧은 대기.
+  // Supabase Auth의 signUp/signIn 연속 호출 rate limit을 피하기 위한 짧은 대기.
   await new Promise((resolve) => setTimeout(resolve, 500))
 }

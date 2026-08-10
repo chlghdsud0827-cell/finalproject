@@ -838,3 +838,32 @@ Playwright로 dev 서버를 직접 띄워 브라우저 시나리오를 재현하
   - `VITE_KAKAO_MAP_APP_KEY`: 이전 배포 때 발견했던 "프로덕션에 카카오맵 키가 없어 지도가 placeholder로 보이는" 문제를 이번에 함께 해결(로컬 `.env.local`에 있던 실제 키 값을 그대로 등록).
 - `vercel deploy --prod` 실행 → https://ui-ux-course-site.vercel.app 배포 완료, 접속 확인(200 OK).
 - **주의**: 배포된 사이트에서 로그인/회원가입을 시도하면, 아직 Supabase 대시보드 설정 3가지(SQL 실행・스키마 노출・이메일 확인 끄기)와 계정 시딩이 안 되어 있어 에러가 날 수 있음 — 위 "사용자가 할 일" 완료 후 정상 동작 예정.
+
+## DB 연결 1단계(계정) 최종 확인 완료 (2026-08-10)
+
+사용자가 Supabase 대시보드 설정 3가지를 전부 완료. 시딩 스크립트를 처음 실행했을 때 `permission denied for schema academy` 에러 발생 — **원인**: 새로 만든 스키마는 `public`과 달리 `anon`/`authenticated` 역할에 기본 접근 권한이 없음(RLS는 "어떤 행을 볼 수 있는지"만 걸러줄 뿐, 그 전에 스키마/테이블 자체에 대한 GRANT가 먼저 필요). `supabase/migrations/0002_academy_grants.sql` 신규 작성(academy 스키마 USAGE + 테이블 CRUD 권한 + 앞으로 추가될 테이블에도 자동 적용되는 default privileges)해서 사용자가 SQL Editor에서 실행.
+- 시딩 스크립트(`scripts/seed-accounts.mjs`)도 재실행에 안전하도록 수정 — 첫 시도에서 이미 auth 계정까지는 만들어졌던 상태라, "이미 가입됨" 에러가 나면 로그인해서 id를 다시 가져오고 프로필은 `insert` 대신 `upsert`로 저장하도록 변경.
+- 재실행 결과 9개 계정 전부 정상 생성(`[OK]`). 이어서 관리자(admin@example.com)・멘토(jisu@example.com) 두 계정으로 실제 로그인 → 프로필 조회까지 end-to-end 테스트 성공(멘토 계정의 `mentor_id: "mentor-1"`까지 정확히 확인) — **DB 연결 1단계(계정) 완전히 동작 확인 완료**.
+- 아직 커밋・푸시하지 않음(`0002_academy_grants.sql` 추가분). dev 서버(`localhost:5173`)에서 `/login`으로 직접 로그인・회원가입 테스트 권장(테스트 계정 비밀번호는 전부 `123456`).
+
+## 상담 분야 "기타" 추가 + 이유나 계정 데이터 재연결 + 멘토 상태 직접 수정 (2026-08-10)
+
+1. **상담 분야에 "기타" 추가 — 완료**: `data/mentors.js`의 `CONSULTATION_CATEGORIES`에 추가. 특정 멘토의 전문분야로는 지정하지 않음(어떤 멘토와도 매칭되지 않는 진짜 catch-all 분야라, 관리자가 "상담 매칭 모니터링"에서 내용을 보고 판단해 수동 배정 — 분야 일치 멘토가 없으니 부하 순으로만 정렬됨, 기존 로직 그대로 동작).
+2. **이유나 계정에 미리 연결해둔 합격/멘토 배정이 안 보이던 문제 — 원인 확인 후 수정**: DB 연결 1단계에서 계정을 Supabase Auth로 옮기며 예고했던 대로, 이유나가 실제 Supabase 계정(새 UUID)으로 로그인하게 되면서 `data/applications.js`・`data/consultations.js`에 옛 mock id(`'user-yuna'`)로 심어둔 합격/상담 시드가 더 이상 본인 것으로 연결되지 않아 마이페이지에서 안 보였던 것. 이유나 계정으로 실제 로그인해서 Supabase가 발급한 진짜 id를 확인한 뒤, 두 파일의 `userId`/`studentId`를 그 id로 교체 — 이제 로그인하면 합격 상태・은채 멘토 배정이 정상적으로 보임. **"나의 지원현황을 볼 수 있는 페이지"는 이미 마이페이지(`/mypage`)에 있음** — 상단 프로필 배지(합격자/대기자/지원자)와 "지원 현황" 탭이 정확히 이 역할을 하고, 이번 수정으로 이유나 계정에서도 정상적으로 데이터가 뜨게 됨. 새로운 페이지를 만들 필요는 없었고, 연결이 끊어져 있던 게 원인.
+3. **멘토 대시보드에서 상담 상태를 직접 되돌릴 수 있도록 — 완료**: 기존엔 "수락"(matched→in_progress)・"완료 처리"(in_progress→completed) 버튼으로 앞으로만 진행 가능해서, 잘못 눌렀을 때 되돌릴 방법이 없었음. `ConsultationContext.jsx`에 `setConsultationStatus(id, status)`를 추가해 matched・in_progress・completed 세 상태 사이를 자유롭게 오갈 수 있게 하고(요청 대기 상태로는 못 가게 막음 — 배정 해제는 기존 "거절" 버튼의 역할이라 겹치면 mentorId가 남은 채 대기 상태가 되는 모순이 생김), `MentorDashboard.jsx`의 각 상담 항목에 "상태 직접 변경" 드롭다운을 추가.
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 `/consultation`에 "기타" 분야가 보이는지, yuna@example.com(비밀번호 123456)으로 로그인해 `/mypage`에서 합격 상태・은채 멘토 배정이 뜨는지, jisu@example.com으로 로그인해 `/mentor`에서 상태 드롭다운으로 되돌리기가 되는지 직접 확인 필요. 아직 커밋・푸시하지 않음.
+
+## AI 인트로 이미지 교체 + Gemini 로고 크기 보정 (2026-08-10, 같은 날 후속 요청)
+
+1. **"실무에서 쓰는 AI 툴" 인트로 이미지 교체 — 완료**: 사용자가 추가한 `reference/ai2.jpg`(736×736 정사각형, AI・인간 손 악수 이미지)를 컨테이너 비율(400×300, 4:3)에 맞춰 위아래를 살짝 잘라내 크롭(핵심 요소인 악수・"AI" 텍스트・주변 아이콘은 전부 보이도록). `data/aiTools.js`가 참조하는 경로(`/images/ai-agent-intro.jpg`)는 그대로 두고 파일 내용만 교체해 코드 변경 없이 반영.
+2. **Gemini 로고만 다른 로고보다 작아 보이던 문제 — 완료**: 스크린샷으로 확인해보니 Claude・ChatGPT・Figma 로고는 아이콘이 정사각형 캔버스 가장자리까지 꽉 채우는데, Gemini만 원본 크롭 시 별 모양 주변에 여백이 많이 남아 같은 200×200 파일이어도 실제 아이콘이 훨씬 작게 보였던 것. `reference/제미나이 아이콘.jpg` 원본에서 별 모양 주변 여백을 줄여 다시 크롭(다른 로고들과 비슷한 여백 비율로) → `public/images/ai-logos/gemini.png` 교체.
+- 이미지 작업은 기존과 동일하게 `npm install --no-save sharp` → 크롭 → `npm uninstall sharp`로 제거(흔적 없음 확인). `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 `/course`의 AI 인트로 이미지와 Gemini 로고 크기 직접 확인 필요. 아직 커밋・푸시하지 않음.
+
+## DB 연결 2단계(지원) 착수: 테이블 생성 + 시드 데이터 (2026-08-10)
+
+1. **`academy.applications` 테이블 + RLS — 완료**: `supabase/migrations/0003_academy_applications.sql` 작성・실행(user_id는 실제 로그인 계정만 연결하고, 정원을 채우는 더미 지원자는 user_id 없이 name만 저장하는 구조). 첫 시딩 시도에서 `new row violates row-level security policy` 발생 — 원인은 `applications_insert_own` 정책이 `auth.uid() = user_id`만 허용해 user_id가 null인 더미 지원자를 등록할 방법이 없었던 것. `0004_academy_applications_dummy_insert.sql`로 `user_id is null` 전용 INSERT 정책을 추가해 해결(Postgres RLS는 같은 command에 정책이 여러 개면 OR로 합쳐짐).
+2. **시드 데이터 등록 — 완료**: `scripts/seed-applications.mjs` 작성 후 실행 — 이유나 계정으로 로그인해 실제 합격 지원 1건 등록, 이어서 계정 없는 더미 지원자 18명(무작위 이름) 등록. 최종 확인 결과 `course-ui-ux` 과정 confirmed 상태 19건으로 정확히 맞음(기존 mock의 "정원 20석 중 19석 확정" 시나리오와 동일).
+3. **다음 남은 작업**: `ApplicationContext.jsx`를 mock 배열 → Supabase 비동기 호출로 전환하는 작업은 아직 안 함(이번엔 테이블・시드까지만 진행). `MyPage`・`Admin`・`CourseDetail`의 인터페이스는 그대로 유지될 예정이라 큰 수정 없이 붙을 것으로 예상.
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과.
+
+## 오늘(2026-08-10)까지 진행 내역 커밋・푸시・배포

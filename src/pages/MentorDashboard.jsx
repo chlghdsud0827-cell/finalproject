@@ -16,6 +16,7 @@ function MentorDashboard() {
     acceptConsultation,
     declineConsultation,
     completeConsultation,
+    setConsultationStatus,
   } = useConsultations()
   const { getAllCallbackRequests, markContacted } = useCallbackRequests()
 
@@ -76,6 +77,17 @@ function MentorDashboard() {
                       완료 처리
                     </button>
                   )}
+                  <label className="mentor-dashboard__status-fix">
+                    상태 직접 변경
+                    <select
+                      value={c.status}
+                      onChange={(e) => setConsultationStatus(c.id, e.target.value)}
+                    >
+                      <option value="matched">{CONSULT_STATUS_LABEL.matched}</option>
+                      <option value="in_progress">{CONSULT_STATUS_LABEL.in_progress}</option>
+                      <option value="completed">{CONSULT_STATUS_LABEL.completed}</option>
+                    </select>
+                  </label>
                 </div>
               </li>
             ))}

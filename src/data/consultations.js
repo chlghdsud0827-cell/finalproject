@@ -36,12 +36,13 @@ export const initialConsultations = [
     status: 'in_progress',
     requestedAt: '2026-07-11T09:00:00.000Z',
   },
-  // 로그인 테스트 계정 '이유나'(user-yuna, data/users.js)를 은채(mentor-3) 멘토와
-  // 미리 연결해둔 시드 — 마이페이지 "내 멘토" 섹션을 빈 상태가 아니라 실제로
-  // 배정된 멘토가 있는 화면으로 바로 확인할 수 있게 한다.
+  // 로그인 테스트 계정 '이유나'(yuna@example.com)를 은채(mentor-3) 멘토와 미리
+  // 연결해둔 시드 — 마이페이지 "내 멘토" 섹션을 빈 상태가 아니라 실제로 배정된
+  // 멘토가 있는 화면으로 바로 확인할 수 있게 한다. studentId는 Supabase Auth
+  // 계정 전환(DB 연결 1단계) 이후의 실제 계정 id.
   {
     id: 'seed-consult-yuna',
-    studentId: 'user-yuna',
+    studentId: 'a2692aeb-3606-4cd4-bb29-a9347dccefd3',
     name: '이유나',
     mentorId: 'mentor-3',
     category: '포트폴리오 피드백',

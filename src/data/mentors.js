@@ -4,6 +4,7 @@ export const CONSULTATION_CATEGORIES = [
   '실무 툴 (Figma 등)',
   '학습 방법/진로',
   '교육과정 지원',
+  '기타',
 ]
 
 // photo는 reference/멘토 프로필 사진.png에서 인물별로 크롭(public/images/mentors/).
