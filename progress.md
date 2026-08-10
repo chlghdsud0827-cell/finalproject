@@ -867,3 +867,6 @@ Playwright로 dev 서버를 직접 띄워 브라우저 시나리오를 재현하
 - `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과.
 
 ## 오늘(2026-08-10)까지 진행 내역 커밋・푸시・배포
+- GitHub: 커밋 `dcfe5d2` → `main` 브랜치 푸시 완료.
+- Vercel: `vercel deploy --prod` 실행 — 처음 두 번은 일시적 네트워크 오류(`Not authorized`, `fetch failed`)로 실패, 세 번째 재시도에서 성공. https://ui-ux-course-site.vercel.app 배포 완료, 접속 확인(200 OK).
+- 배포 대상에 포함된 것: 상담 분야 "기타" 추가, 이유나 계정 재연결, 멘토 상태 직접 수정 드롭다운, AI 인트로 이미지・Gemini 로고 교체, DB 연결 2단계 테이블/시드용 SQL 마이그레이션 파일 3개(실제 DB 반영은 Supabase 대시보드에서 별도로 이미 완료됨 — 이 커밋에 포함된 SQL 파일은 기록용).
