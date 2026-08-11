@@ -51,17 +51,6 @@ function HomePromoModal({ course }) {
           ✕
         </button>
 
-        <div className="home-promo-modal__media">
-          {course.promoImage ? (
-            <img src={course.promoImage} alt="" aria-hidden="true" />
-          ) : (
-            <div className="home-promo-modal__media-fallback" />
-          )}
-          <span className="home-promo-modal__tag">
-            국비지원 · {course.currentCohort}기 모집중
-          </span>
-        </div>
-
         <div className="home-promo-modal__body">
           <h2>{course.title}</h2>
           <p>{course.summary}</p>

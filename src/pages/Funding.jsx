@@ -59,7 +59,11 @@ function Funding() {
       <p className="funding__more-desc">
         더 자세한 안내는 <Link to="/faq">전체 FAQ</Link>에서 확인하거나,{' '}
         <Link to="/inquiry">문의 게시판</Link>에 남겨주시면 담당자가 답변해
-        드립니다.
+        드립니다. 국민취업지원제도 자체에 대한 공식 안내는{' '}
+        <a href="https://www.work24.go.kr" target="_blank" rel="noopener noreferrer">
+          고용24(work24.go.kr)
+        </a>
+        에서도 확인하실 수 있습니다.
       </p>
 
       <BottomCta />

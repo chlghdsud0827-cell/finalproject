@@ -43,11 +43,12 @@
 }
 
 /* 버튼이 눈에 잘 안 띈다는 피드백 — 말풍선이 몇 초마다 한 번씩 나타났다
-   사라지길 반복해서 시선을 끈다(항상 떠 있으면 거슬려서 간헐적으로만). */
+   사라지길 반복해서 시선을 끈다(항상 떠 있으면 거슬려서 간헐적으로만).
+   버튼 왼쪽 대각선 위에 떠서 더 잘 보이도록 배치. */
 .floating-consult__bubble {
   position: absolute;
-  right: calc(100% + 0.6rem);
-  top: 50%;
+  bottom: calc(100% + 0.6rem);
+  right: -0.25rem;
   padding: 0.45em 0.85em;
   border-radius: 999px;
   background: #fff;
@@ -59,34 +60,41 @@
   opacity: 0;
   pointer-events: none;
   animation: floating-consult-bubble 8s ease-in-out infinite;
+  transition: opacity var(--transition-base), transform var(--transition-base);
 }
 
 .floating-consult__bubble::after {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
+  top: 100%;
+  right: 1rem;
   border: 6px solid transparent;
-  border-left-color: #fff;
+  border-top-color: #fff;
 }
 
 @keyframes floating-consult-bubble {
   0%,
   55% {
     opacity: 0;
-    transform: translateY(-50%) translateX(6px);
+    transform: translateY(6px);
   }
   65%,
   85% {
     opacity: 1;
-    transform: translateY(-50%) translateX(0);
+    transform: translateY(0);
   }
   95%,
   100% {
     opacity: 0;
-    transform: translateY(-50%) translateX(6px);
+    transform: translateY(6px);
   }
+}
+
+/* 버튼에 마우스를 올리고 있는 동안은 애니메이션 주기와 상관없이 계속 떠있게 한다. */
+.floating-consult:hover .floating-consult__bubble {
+  animation: none;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* 메뉴가 열려있을 때는 말풍선을 숨긴다 */

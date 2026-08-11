@@ -9,6 +9,7 @@ function HeroSlider() {
   const [index, setIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
   const videoRefs = useRef([])
+  const touchStartX = useRef(null)
 
   const goTo = useCallback((i) => {
     setIndex((i + heroSlides.length) % heroSlides.length)
@@ -16,6 +17,19 @@ function HeroSlider() {
 
   const goPrev = useCallback(() => goTo(index - 1), [goTo, index])
   const goNext = useCallback(() => goTo(index + 1), [goTo, index])
+
+  // 모바일에서 화살표 버튼 대신 좌우로 스와이프해서 슬라이드를 넘길 수 있게 한다.
+  const SWIPE_THRESHOLD = 40
+  function handleTouchStart(e) {
+    touchStartX.current = e.touches[0].clientX
+  }
+  function handleTouchEnd(e) {
+    if (touchStartX.current == null) return
+    const delta = e.changedTouches[0].clientX - touchStartX.current
+    if (delta > SWIPE_THRESHOLD) goPrev()
+    else if (delta < -SWIPE_THRESHOLD) goNext()
+    touchStartX.current = null
+  }
 
   // 슬라이드가 바뀔 때마다(수동 이동 포함) 그 슬라이드의 영상은 처음부터 다시
   // 재생하고, 방금까지 보이던 슬라이드의 영상은 멈춰서 화면 밖에서 계속 재생되지
@@ -58,6 +72,8 @@ function HeroSlider() {
         <div
           className="hero-slider__track"
           style={{ transform: `translateX(-${index * 100}%)` }}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           {heroSlides.map((slide, i) => (
             <div

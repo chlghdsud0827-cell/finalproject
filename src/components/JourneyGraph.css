@@ -150,11 +150,36 @@
     display: none;
   }
 
+  /* 곡선 그래프 대신, 모바일에서는 세로선 + 점으로 잇는 타임라인 형태로 대체
+     (텍스트만 덩그러니 나열되던 문제 — 데스크톱과 비슷한 "단계가 이어진다"는
+     느낌을 세로선으로라도 살린다). */
   .journey-graph__step {
-    position: static;
+    position: relative;
     transform: none !important;
     width: 100%;
-    text-align: center;
+    text-align: left;
     margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .journey-graph__step::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.35rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: #f5b83d;
+  }
+
+  .journey-graph__step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 0.3rem;
+    top: 1.1rem;
+    bottom: -1.5rem;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.25);
   }
 }

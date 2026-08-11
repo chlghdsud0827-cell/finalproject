@@ -10,6 +10,7 @@ export const eligibility = [
 ]
 
 export const costInfo = [
+  { label: '총 교육비', value: '6,800,000원 (20주 과정 기준)' },
   { label: '수강료 지원율', value: '최대 100% (개인별 지원 한도에 따라 상이)' },
   { label: '자부담금', value: '지원 한도 초과분에 한해 발생, 분할 납부 가능' },
   { label: '훈련장려금', value: '출석률 등 조건 충족 시 별도 지급 (제도 기준에 따름)' },

@@ -220,7 +220,11 @@
 
 @media (max-width: 640px) {
   .hero-slider__slide {
-    padding: 2.5rem 1.5rem 3.5rem;
+    /* 좁은 화면에서는 영상(16:9)이 세로로 훨씬 작게 줄어들어 화면 중앙에 떠서,
+       위쪽 정렬된 문구・버튼과 겹쳐 가리는 문제가 있었음 — 모바일에서만 문구를
+       하단으로 내려 영상과 안 겹치게 한다. */
+    justify-content: flex-end;
+    padding: 1.5rem 1.5rem 2rem;
   }
   .hero-slider__title {
     font-size: 1.375rem;

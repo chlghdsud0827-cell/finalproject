@@ -36,6 +36,7 @@
 
 .site-header__nav {
   display: flex;
+  justify-content: center;
   gap: 2rem;
   flex: 1;
 }

@@ -6,7 +6,6 @@ import HeroSlider from '../components/HeroSlider.jsx'
 import HomePromoModal from '../components/HomePromoModal.jsx'
 import FundingBanner from '../components/FundingBanner.jsx'
 import AchievementBanner from '../components/AchievementBanner.jsx'
-import DeadlineCountdown from '../components/DeadlineCountdown.jsx'
 import PortfolioCard from '../components/PortfolioCard.jsx'
 import JourneyGraph from '../components/JourneyGraph.jsx'
 import PartnerMarquee from '../components/PartnerMarquee.jsx'
@@ -22,16 +21,9 @@ function Home() {
   return (
     <main className="home">
       <HomePromoModal course={course} />
-      <FundingBanner />
+      <FundingBanner course={course} />
       <HeroSlider />
       <AchievementBanner />
-
-      <div className="home__capacity">
-        <Link className="btn btn--primary" to="/course">
-          지원하기
-        </Link>
-        <DeadlineCountdown deadline={course.applicationDeadline} compact />
-      </div>
 
       <JourneyGraph />
 

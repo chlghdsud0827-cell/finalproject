@@ -26,5 +26,8 @@ dist-ssr
 .vercel
 .env*
 
+# Claude Code 로컬 권한 설정(개인 로컬 도구 설정, 저장소에 포함하지 않음)
+.claude
+
 # 원본 이미지 자료(용량이 커서 저장소에는 포함하지 않음, 실제 사용 이미지는 public/images/에 있음)
 reference

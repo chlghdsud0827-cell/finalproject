@@ -45,8 +45,8 @@ function OtherCoursePanel({ course }) {
         <p className="course-detail__status">{course.progressNote}</p>
       </div>
 
-      <section className="course-detail__section" aria-label="일정">
-        <h2>일정</h2>
+      <section className="course-detail__section" aria-label="일정 및 수강료">
+        <h2>일정 및 수강료</h2>
         <dl className="course-detail__other-dates">
           <div>
             <dt>진행 기간</dt>
@@ -61,6 +61,12 @@ function OtherCoursePanel({ course }) {
               {formatDate(course.nextRecruitingEnd)}
             </dd>
           </div>
+          {course.tuition && (
+            <div>
+              <dt>총 교육비</dt>
+              <dd>{course.tuition}</dd>
+            </div>
+          )}
         </dl>
       </section>
 
