@@ -224,27 +224,60 @@
 }
 
 @media (max-width: 640px) {
+  /* object-fit:contain 방식(레터박스)으로 위아래 여백을 만들어 문구를
+     하단에 띄우던 이전 방식은, 영상과 문구 사이에 아무 역할 없는 빈 공간이
+     크게 남는 문제가 있었음 — 모바일에서는 영상을 더 이상 배경처럼 전체
+     오버레이로 깔지 않고, 영상(16:9 그대로, 잘림 없음)을 카드 맨 위에 두고
+     문구를 바로 그 아래 붙여서(자연스러운 문서 흐름) 빈 공간이 생기지 않게
+     한다. */
   .hero-slider__slide {
-    /* 좁은 화면에서는 영상(16:9)이 세로로 훨씬 작게 줄어들어 화면 중앙에 떠서,
-       위쪽 정렬된 문구・버튼과 겹쳐 가리는 문제가 있었음 — 모바일에서만 문구를
-       하단으로 내려 영상과 안 겹치게 한다. */
-    justify-content: flex-end;
-    padding: 1.5rem 1.5rem 2rem;
+    min-height: 0;
+    justify-content: flex-start;
+    padding: 0 1.5rem 1.5rem;
+    gap: 0.5rem;
   }
+
+  .hero-slider__video {
+    position: static;
+    width: calc(100% + 3rem);
+    margin: 0 -1.5rem 1rem;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    /* 박스 비율(16:9)과 영상 원본 비율이 정확히 같아서 cover를 써도 잘리지 않는다. */
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* 문구가 더 이상 영상 위에 겹쳐 뜨지 않으므로 가독성용 어두운 막이 불필요. */
+  .hero-slider__video-overlay {
+    display: none;
+  }
+
   .hero-slider__title {
     font-size: 1.375rem;
   }
 
-  /* object-fit:contain이 기본적으로 위아래 여백을 반반씩 남기는데, 위쪽
-     여백은 아무 역할이 없어 굳이 비워둘 필요가 없다 — 영상을 위로 붙여서
-     남는 여백이 전부 아래쪽(문구・버튼이 있는 자리)에 모이게 한다. */
-  .hero-slider__video {
-    object-position: center top;
+  /* 화살표 버튼이 텅 빈 공간 한가운데 떠 있던 문제 — 영상 아래쪽 경계에
+     살짝 겹치도록 위치를 옮기고, 배경과 잘 구분되도록 골드 계열로 바꾼다.
+     (100vw - 3rem)은 이 화면에서 영상의 실제 렌더링 폭과 거의 같고, 영상이
+     16:9이므로 그 폭의 9/16이 영상의 높이 = 화살표를 놓을 y 위치가 된다.
+     top:50% + translateY(-50%)는 기존 규칙을 그대로 물려받아 그 지점에
+     화살표 중심이 오도록 자동으로 정렬된다. */
+  .hero-slider__arrow {
+    top: calc((100vw - 3rem) * 0.5625);
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
+    color: var(--color-text);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
-  /* 모바일은 문구가 하단에 있으므로(위 .hero-slider__slide 참고), 어두운
-     그라디언트도 위쪽이 아니라 아래쪽에 지도록 방향을 뒤집는다. */
-  .hero-slider__video-overlay {
-    background: linear-gradient(to top, rgba(18, 25, 23, 0.6) 0%, rgba(18, 25, 23, 0) 55%);
+  .hero-slider__arrow:hover {
+    background: linear-gradient(135deg, #d99a1f, var(--color-accent-dark));
+  }
+
+  /* 영상이 더 이상 절대 배치 배경이 아니라 일반 문서 흐름 위에 있는
+     이미지라, 장식용 블롭(position:absolute)이 그 위에 떠 보이게 된다 —
+     모바일에서는 숨긴다. */
+  .hero-slider__slide::before {
+    display: none;
   }
 }

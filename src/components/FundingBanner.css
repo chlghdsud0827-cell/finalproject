@@ -60,4 +60,17 @@
     align-items: center;
     text-align: center;
   }
+
+  /* 좁은 화면에서는 아이콘+문구를 가로로 나란히 두면 문구가 여러 줄로
+     꺾이면서 아이콘만 위쪽에 따로 떠 보이는 것처럼 불균형해 보였음 —
+     아이콘을 문구 위로 올려 세로로 쌓고 전부 가운데 정렬한다. */
+  .funding-banner__content {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .funding-banner__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
 }
