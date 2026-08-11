@@ -150,9 +150,12 @@
     display: none;
   }
 
-  /* 곡선 그래프 대신, 모바일에서는 세로선 + 점으로 잇는 타임라인 형태로 대체
-     (텍스트만 덩그러니 나열되던 문제 — 데스크톱과 비슷한 "단계가 이어진다"는
-     느낌을 세로선으로라도 살린다). */
+  /* 곡선 그래프 대신, 모바일에서는 세로선 + 점으로 하나로 쭉 이어진 타임라인을
+     그린다. 데스크톱의 "호버한 단계까지 선이 채워지는" 진행 표시와 같은
+     역할을, 모바일에서는 스크롤로 각 단계에 도달할 때마다(JourneyGraph.jsx의
+     IntersectionObserver) 그 단계까지 순서대로 골드색으로 채워가는 방식으로
+     재현한다 — 아직 도달하지 않은 구간은 옅은 회색으로 남아있다가, 스크롤이
+     지나가는 단계마다 멈춰서 하나씩 채워진다. */
   .journey-graph__step {
     position: relative;
     transform: none !important;
@@ -170,6 +173,11 @@
     width: 0.65rem;
     height: 0.65rem;
     border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: background-color 0.4s ease;
+  }
+
+  .journey-graph__step--reached::before {
     background: #f5b83d;
   }
 
@@ -181,5 +189,10 @@
     bottom: -1.5rem;
     width: 2px;
     background: rgba(255, 255, 255, 0.25);
+    transition: background-color 0.4s ease;
+  }
+
+  .journey-graph__step--reached:not(:last-child)::after {
+    background: #f5b83d;
   }
 }

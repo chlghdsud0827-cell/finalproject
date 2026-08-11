@@ -16,6 +16,11 @@ function pad(n) {
   return String(n).padStart(2, '0')
 }
 
+function formatDeadlineDate(deadline) {
+  const d = new Date(deadline)
+  return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`
+}
+
 function DeadlineCountdown({ deadline, compact = false }) {
   const [remaining, setRemaining] = useState(() => getRemaining(deadline))
 
@@ -42,7 +47,7 @@ function DeadlineCountdown({ deadline, compact = false }) {
         alt=""
         aria-hidden="true"
       />
-      지원 마감까지 D-{remaining.days}{' '}
+      {formatDeadlineDate(deadline)} 마감 · D-{remaining.days}{' '}
       <span className="deadline-countdown__clock">
         {pad(remaining.hours)}:{pad(remaining.minutes)}:{pad(remaining.seconds)}
       </span>

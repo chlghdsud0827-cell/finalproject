@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { journeySteps } from '../data/journeySteps.js'
 import './JourneyGraph.css'
 
@@ -29,6 +29,11 @@ function getPathLength(d) {
 
 function JourneyGraph() {
   const [hoveredStep, setHoveredStep] = useState(0)
+  // 모바일(세로 타임라인)에서는 마우스 호버가 없으니, 스크롤로 각 단계가
+  // 화면에 들어올 때마다 그 단계까지 "도달"한 것으로 보고 순서대로 채워간다
+  // — 데스크톱의 호버 진행 표시와 같은 역할을 스크롤이 대신하는 것.
+  const [mobileReachedStep, setMobileReachedStep] = useState(0)
+  const stepRefs = useRef([])
 
   const { totalLength, cumulativeLengths } = useMemo(() => {
     let sum = 0
@@ -37,6 +42,24 @@ function JourneyGraph() {
   }, [])
 
   const filledLength = hoveredStep > 0 ? cumulativeLengths[hoveredStep - 1] : 0
+
+  useEffect(() => {
+    const observers = journeySteps.map((_, i) => {
+      const el = stepRefs.current[i]
+      if (!el) return null
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setMobileReachedStep((prev) => Math.max(prev, i + 1))
+          }
+        },
+        { threshold: 0.5 },
+      )
+      observer.observe(el)
+      return observer
+    })
+    return () => observers.forEach((o) => o?.disconnect())
+  }, [])
 
   return (
     <section className="journey-graph" aria-label="교육 과정 진행 단계">
@@ -76,7 +99,10 @@ function JourneyGraph() {
           {journeySteps.map((step, i) => (
             <div
               key={step.id}
-              className={`journey-graph__step journey-graph__step--${step.labelPos}`}
+              ref={(el) => (stepRefs.current[i] = el)}
+              className={`journey-graph__step journey-graph__step--${step.labelPos}${
+                mobileReachedStep >= i + 1 ? ' journey-graph__step--reached' : ''
+              }`}
               style={{ left: `${step.x}%`, top: `${step.y}%` }}
               onMouseEnter={() => setHoveredStep(i + 1)}
               onMouseLeave={() => setHoveredStep(0)}

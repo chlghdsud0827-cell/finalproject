@@ -14,7 +14,8 @@ export const courses = [
     capacity: 20,
     // 모집 시작일 ~ 마감일. 실제 일정이 정해지기 전까지 사용하는 placeholder
     applicationStart: '2026-07-15T00:00:00',
-    applicationDeadline: '2026-08-15T23:59:59',
+    // 8/13 제출・평가 시점 기준으로 "지원 마감까지 D-5 정도"로 보이도록 맞춘 값.
+    applicationDeadline: '2026-08-18T23:59:59',
     // 과정은 기수(회차) 단위로 운영된다. 현재 모집 중인 기수.
     currentCohort: 4,
     status: 'recruiting',

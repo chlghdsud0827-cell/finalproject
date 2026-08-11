@@ -21,7 +21,7 @@ function Home() {
   return (
     <main className="home">
       <HomePromoModal course={course} />
-      <FundingBanner course={course} />
+      <FundingBanner />
       <HeroSlider />
       <AchievementBanner />
 
