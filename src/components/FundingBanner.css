@@ -13,20 +13,12 @@
   flex-wrap: wrap;
 }
 
-.funding-banner__content {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
+/* 버튼 자체가 이미 흰 배경이라, 원래 있던 흰색 원형 배지 배경은 필요 없어짐. */
 .funding-banner__icon {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
   object-fit: contain;
   flex: 0 0 auto;
-  background: #fff;
-  border-radius: 50%;
-  padding: 0.3rem;
 }
 
 .funding-banner__text {
@@ -59,18 +51,5 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-  }
-
-  /* 좁은 화면에서는 아이콘+문구를 가로로 나란히 두면 문구가 여러 줄로
-     꺾이면서 아이콘만 위쪽에 따로 떠 보이는 것처럼 불균형해 보였음 —
-     아이콘을 문구 위로 올려 세로로 쌓고 전부 가운데 정렬한다. */
-  .funding-banner__content {
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .funding-banner__icon {
-    width: 2.5rem;
-    height: 2.5rem;
   }
 }

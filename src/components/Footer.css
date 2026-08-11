@@ -66,8 +66,18 @@
   line-height: 1.9;
 }
 
+/* 항목(라벨:값)이 길어서 좁은 화면에서 단어 중간이 끊기듯 줄바꿈되던 문제 —
+   각 항목을 하나의 덩어리(span)로 묶어 nowrap을 걸고, 줄이 부족하면 항목
+   단위로 통째로 다음 줄로 넘어가게 한다(항목 내부는 항상 한 줄 유지). */
 .site-footer__business p {
+  display: flex;
+  flex-wrap: wrap;
   margin: 0;
+  gap: 0.2rem 1.25rem;
+}
+
+.site-footer__business p span {
+  white-space: nowrap;
 }
 
 .site-footer__business a {

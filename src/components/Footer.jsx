@@ -23,21 +23,26 @@ function Footer() {
 
         <div className="site-footer__business">
           <p>
-            사업자(법인)명 : {businessInfo.companyName} &nbsp;&nbsp; 사업자등록번호 :{' '}
-            {businessInfo.businessRegistrationNo}
-          </p>
-          <p>통신판매업번호 : {businessInfo.mailOrderNo}</p>
-          <p>
-            대표 : {businessInfo.ceo} &nbsp;&nbsp; 주소 : {contactInfo.address}
+            <span>사업자(법인)명 : {businessInfo.companyName}</span>
+            <span>사업자등록번호 : {businessInfo.businessRegistrationNo}</span>
           </p>
           <p>
-            교육담당 : {businessInfo.academyName} &nbsp;&nbsp; 학원명 :{' '}
-            {businessInfo.academyName} &nbsp;&nbsp; 학원등록번호 :{' '}
-            {businessInfo.academyRegistrationNo}
+            <span>통신판매업번호 : {businessInfo.mailOrderNo}</span>
           </p>
           <p>
-            대표전화 : {contactInfo.phone} &nbsp;&nbsp; 대표이메일 :{' '}
-            <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+            <span>대표 : {businessInfo.ceo}</span>
+            <span>주소 : {contactInfo.address}</span>
+          </p>
+          <p>
+            <span>교육담당 : {businessInfo.academyName}</span>
+            <span>학원명 : {businessInfo.academyName}</span>
+            <span>학원등록번호 : {businessInfo.academyRegistrationNo}</span>
+          </p>
+          <p>
+            <span>대표전화 : {contactInfo.phone}</span>
+            <span>
+              대표이메일 : <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+            </span>
           </p>
           <Link to="/course" className="site-footer__tuition">
             수강료안내

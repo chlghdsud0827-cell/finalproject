@@ -32,7 +32,10 @@ export const businessInfo = {
   companyName: '(주)AI UI/UX디자인아카데미',
   businessRegistrationNo: '123-45-67890',
   mailOrderNo: '제2026-서울강남-00000호',
-  ceo: '성훈',
+  // 사업자 정보란에는 성을 뺀 이름만 쓰면 안 돼서 성을 붙인 풀네임으로 표기
+  // (mock 로그인 계정 이름은 '성훈'으로 그대로 유지 — 로그인 화면 표시용 이름과
+  // 이 법적 대표자 표기는 별개).
+  ceo: '김성훈',
   academyName: 'AI UI/UX 디자인 아카데미',
   academyRegistrationNo: '서울강남 제0000호',
 }
