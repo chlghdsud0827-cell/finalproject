@@ -28,6 +28,9 @@ function FloatingConsult() {
       <details className="floating-consult" ref={detailsRef}>
         <summary className="floating-consult__button" aria-label="상담 메뉴 열기">
           <img src="/icons/support.png" alt="" aria-hidden="true" />
+          <span className="floating-consult__bubble" aria-hidden="true">
+            상담하기
+          </span>
         </summary>
         <div className="floating-consult__menu">
           <button

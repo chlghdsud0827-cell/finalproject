@@ -2,7 +2,9 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--color-card);
+  /* 순백색이라 페이지 배경(--color-bg)과 거의 구분이 안 되던 문제 — 브랜드
+     그린을 아주 옅게 섞어 살짝 색을 입힌다. */
+  background: #eef5f1;
   border-bottom: 1px solid var(--color-badge-waiting-bg);
 }
 

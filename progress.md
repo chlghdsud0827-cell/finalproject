@@ -884,3 +884,89 @@ Playwright로 dev 서버를 직접 띄워 브라우저 시나리오를 재현하
 2. **과정 소개(`/course`) 탭 분리 — 완료**: "국비교육과정 외 다른 과정 안내도 필요할 듯"이라는 요청으로, 상단에 4개 과정(국비 과정 포함) 탭을 추가해 전부 볼 수 있게 함. 국비 과정 탭은 기존 내용(모집요강・커리큘럼・지원 플로우 등) 그대로 유지. 나머지 3개 과정(UX 리서치 심화・프로덕트 디자인 부트캠프・디자인 시스템 마스터)은 여태 페이지 맨 아래 요약 카드로만 존재했던 것을 각자 전용 탭으로 승격 — `data/otherCourseDetails.js` 신규 작성해 과정별 "이런 걸 배워요"(스킬 태그)・간단한 커리큘럼 개요(국비 과정보다는 단계 수를 줄인 요약형)를 추가하고, 일정(진행기간・다음 기수 모집 예정)과 "모집이 시작되면 공지사항・학원 일정에서 안내" 문구를 표시(아직 모집 중이 아니라 지원 플로우는 없음). 기존에 페이지 맨 아래 있던 "다른 교육과정" 카드 그리드 섹션은 탭으로 대체되어 중복이라 제거.
 - `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 `/course`의 탭 4개 전환, 헤더 "소통공간"에 멘토상담이 빠지고 공지사항이 들어왔는지 직접 확인 필요.
 - 커밋 `045a83b` → GitHub `main` 푸시 완료, Vercel 배포 완료(https://ui-ux-course-site.vercel.app, 200 OK 확인).
+
+## DB 연결 3단계(상담) 완료: 정규 상담 + 비회원 콜백 (2026-08-11)
+
+1・2단계(계정・지원)에 이어 상담 기능을 Supabase로 전환. "정규 상담"(로그인 회원, `ConsultationContext`)과 "비회원 상담"(로그인 없이 이름/연락처만 남기는 콜백 신청, `CallbackContext`)은 서로 다른 테이블로 분리.
+
+1. **테이블 2개 + RLS — 완료**: `supabase/migrations/0006_academy_consultations.sql`(`academy.consultations` — 2단계 `applications`와 동일하게 신청 시점 이름을 `name` 컬럼에 직접 저장해, 관리자 화면에 UUID 대신 바로 이름이 뜨도록 함) · `0007_academy_callback_requests.sql`(`academy.callback_requests` — 비회원 기능이라 INSERT 정책에 `anon` 역할도 포함). 둘 다 사용자가 SQL Editor에서 실행 완료.
+2. **`ConsultationContext.jsx`・`CallbackContext.jsx`를 mock → Supabase로 전환 — 완료**: `ApplicationContext.jsx`와 동일한 패턴(최초 조회 + mutation만 비동기 Supabase 호출, 나머지 조회 함수는 로컬 state를 읽는 동기 함수 유지) — `ConsultationRequest`・`MentorDashboard`・`Admin`・`MyPage`・`CourseDetail` 전부 코드 수정 없이 그대로 붙음. 더 이상 쓰이지 않는 `data/consultations.js`・`data/callbackRequests.js`(mock 시드 배열) 삭제.
+3. **시드 데이터 등록 — 완료**: `scripts/seed-consultations.mjs`(실제 계정 4명으로 정규 상담 4건 — 기존 mock 시나리오와 동일하게 지수(mentor-1) 2건 진행 중, 은채(mentor-3)는 이유나 1건만) · `scripts/seed-callback-requests.mjs`(비회원 콜백 2건) 실행 완료.
+4. **e2e 테스트 8단계 + 오탐 하나 조사 — 완료**: 신청(requested)→관리자 배정(matched)→멘토 수락(in_progress)→완료 처리(completed)→직접 되돌리기(matched)→거절(배정 해제, requested) 전부 정상 동작 확인. 테스트 중 "비회원(anon) 콜백 신청이 RLS에 막힌다"는 현상을 발견했었는데, 원인은 실제 버그가 아니라 **테스트 스크립트가 `.select().single()`로 insert 직후 결과를 되받으려 한 것** — Postgres RLS는 `RETURNING`이 있으면 INSERT 통과와 별개로 그 행에 대한 SELECT 권한도 필요한데, anon은 select 정책이 없어(의도된 설계 — 콜백 목록 조회는 관리자만 함) 여기서 막힌 것. 실제 앱 코드(`CallbackContext.jsx`)는 `.select()` 없이 insert만 하므로 이 문제와 무관함을 앱 코드와 동일한 방식으로 재현 테스트해 확인. GRANT・RLS 정책・PERMISSIVE 여부까지 전부 정상이었음(사용자가 SQL Editor로 `pg_policies`・`information_schema.role_table_grants`・`pg_policy` 세 차례 조회해 함께 확인).
+5. **테스트 흔적 정리 — 완료**: `academy.consultations`・`academy.callback_requests` 둘 다 삭제 정책을 두지 않아(2단계 `applications`와 동일한 설계 — 앱에 삭제 기능이 없음) 스크립트로는 지울 수 없어, 사용자가 SQL Editor에서 직접 `delete` 실행. 최종 조회로 시드 데이터만 정확히 남은 것 확인(상담 4건, 콜백 2건).
+- (같은 날 후속 요청) **메인 히어로 슬라이더 높이 확대 — 완료**: `HeroSlider.css`의 `.hero-slider__slide { min-height: 320px }` → `500px`로 변경("너무 가로로 긴 비율"이라는 피드백).
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 `/consultation` 신청 → `/mypage`에 반영, `jisu@example.com`으로 `/mentor`에서 수락/완료/되돌리기, `/admin`에서 정규・비회원 상담 수동 배정, 메인 페이지 히어로 슬라이더 높이 직접 확인 권장. 아직 커밋・푸시하지 않음.
+
+## 메인 히어로 1번 슬라이드에 애니메이션 gif 적용 (2026-08-11, 같은 날 후속 요청)
+
+"메인비주얼01(비디오)"라는 이름으로 파일을 넣어뒀다는 요청 — 확인해보니 실제로는 mp4가 아니라 **움직이는 gif 파일**(9MB, 128프레임)이었음. gif는 `<video>` 태그 없이 기존처럼 CSS `background-image`에 URL만 넣어도 브라우저가 자동 재생하므로 별도 video 처리 로직 없이 그대로 적용 가능.
+
+1. **gif 파일 적용 — 완료**: `reference/메인비주얼01(비디오).gif`를 `public/images/hero/slide-1.gif`로 복사(내용 변경 없이 그대로 — 이미 완성된 애니메이션이라 크롭・리사이즈 불필요), `data/heroSlides.js`의 1번 슬라이드 `image`를 `slide-1.jpg` → `slide-1.gif`로 교체. gif 프레임 딜레이를 읽어야 해서 이번에도 `npm install --no-save sharp`(gif metadata 조회 후 즉시 `npm uninstall sharp`로 제거, 흔적 없음)로 확인한 결과 총 재생 길이 **8.0초**(128프레임).
+2. **슬라이드 전환 속도를 gif 길이에 맞춤 — 완료**: 기존 `HeroSlider.jsx`는 슬라이드 종류와 무관하게 5초마다 무조건 다음으로 넘기는 고정 `setInterval` 방식이라, gif가 8초짜리면 다 재생되기 전에 다음 슬라이드로 넘어가 버리는 문제가 있었음. `heroSlides.js`에 슬라이드별 `duration`(ms) 필드를 추가할 수 있게 하고(1번 슬라이드만 `8000`, 나머지는 기존처럼 기본값 5000 사용), `HeroSlider.jsx`는 고정 `setInterval` 대신 슬라이드가 바뀔 때마다 그 슬라이드의 `duration`만큼 새로 예약하는 `setTimeout` 방식으로 교체.
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 메인 페이지 1번 슬라이드가 gif로 재생되는지, 8초간 머물다 다음 슬라이드로 넘어가는지, 나머지 슬라이드는 기존처럼 5초 간격인지 직접 확인 필요. **참고**: gif 파일 자체가 9MB로 꽤 무거워서(480×270 해상도인데도) 첫 로딩이 느리게 느껴질 수 있음 — 필요하면 다음에 압축이나 mp4 재인코딩을 검토할 수 있음. 아직 커밋・푸시하지 않음.
+
+## 히어로 1번 슬라이드 gif → mp4로 교체 + 문구 위치 상단 정렬 (2026-08-11, 같은 날 후속 요청)
+
+방금 적용한 gif가 480×270 원본 해상도를 가로 1400px 넘는 배너에 3배 가까이 늘려서 뿌옇게 보인다는 피드백("CCTV 수준") — 사용자가 같은 장면을 1280×720 mp4로 다시 내보내 `reference/`에 추가.
+
+1. **문구(eyebrow・제목・버튼) 위치를 화면 상단으로 — 완료**: 스크린샷에 빨간 박스로 표시해준 위치가 기존 세로 중앙 정렬보다 위쪽이라, `HeroSlider.css`의 `.hero-slider__slide`를 `justify-content: center` → `flex-start`로 변경.
+2. **gif → mp4 교체 — 완료**: `reference/메인비주얼01(비디오).mp4`(ffprobe 없이 mp4 `moov/mvhd`・`tkhd` 박스를 직접 파싱하는 임시 스크립트로 1280×720, 8.0초, 2.8MB 확인)를 `public/videos/hero-slide-1.mp4`로 저장, 더 이상 쓰지 않는 `public/images/hero/slide-1.gif` 삭제. `data/heroSlides.js`의 1번 슬라이드에 `video` 필드를 추가하고 `image`는 `<video>`의 `poster`(로딩 중 정지 프레임)로 재사용하도록 의미를 바꿈(원래 있던 `slide-1.jpg`로 되돌림).
+3. **`HeroSlider.jsx`에 `<video>` 렌더링 추가 — 완료**: `slide.video`가 있으면 CSS `background-image` 대신 `autoPlay muted loop playsInline` `<video>` 엘리먼트 + 어두운 오버레이 div를 렌더링. `position: absolute`인 video/overlay는 기본적으로 정적 배치된 텍스트보다 위에 그려지는 CSS 스태킹 규칙 때문에, 텍스트(`eyebrow`・`title`・`cta`)에 `position: relative; z-index: 2`를 명시로 추가해 영상에 안 가리도록 처리. 전환 속도(8초)는 이전 gif 적용 때 이미 `duration` 필드로 처리해둬서 그대로 유지(우연히 mp4도 동일하게 8.0초).
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 메인 1번 슬라이드가 영상(720p, 이전보다 선명한지)으로 재생되는지, 문구가 상단에 위치하는지, 텍스트가 영상에 가리지 않는지 직접 확인 필요. 아직 커밋・푸시하지 않음.
+
+## 히어로 4번 슬라이드도 영상으로 교체 + 문구 변경 (2026-08-11, 같은 날 후속 요청)
+
+1. **영상 적용 — 완료**: `reference/메인비주얼04(비디오).mp4`(1280×720, 8.0초, 5.7MB — 1번과 동일한 스펙)를 `public/videos/hero-slide-4.mp4`로 저장, `data/heroSlides.js` 4번 슬라이드에 `video`・`duration: 8000` 추가. `HeroSlider.jsx`의 영상 렌더링 로직을 1번 슬라이드 전용이 아니라 `slide.video` 유무로 범용 분기해뒀던 덕분에 컴포넌트 코드 수정 없이 데이터만 추가해서 바로 적용됨.
+2. **문구 교체 — 완료**: "AI로 더 큰 결과물을 만든다"・"무궁한 가능성" 키워드로 3안(A: 혼자선 못 만들 결과물・B: 스킬 강조・C: 가능성 강조 직설형)을 제시해 A안 채택. eyebrow `AI 툴 실무 활용` → `AI로 넓어지는 가능성`, title `AI 프로토타이핑으로\n포트폴리오를 완성합니다.` → `혼자서는 못 만들 결과물을,\nAI와 함께라면 만들 수 있습니다.`로 변경(CTA・링크는 기존 그대로 유지 — "수료생 포트폴리오 보기" → `/portfolio`).
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 4번 슬라이드 영상 재생과 새 문구 확인 필요. 아직 커밋・푸시하지 않음.
+
+## 히어로 2번 슬라이드도 영상으로 교체 (2026-08-11, 같은 날 후속 요청)
+
+`reference/메인비주얼02(비디오).mp4`(1280×720, 8.0초, 1.9MB — 1・4번과 동일한 스펙)를 `public/videos/hero-slide-2.mp4`로 저장, `data/heroSlides.js` 2번 슬라이드에 `video`・`duration: 8000` 추가. 컴포넌트가 이미 범용이라 코드 수정 없이 데이터만 추가. 문구는 이번엔 교체 요청이 없어 기존 그대로 유지("국민취업지원제도로\nAI UI/UX 디자인 과정을 시작하세요.").
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 2번 슬라이드 영상 재생 확인 필요. 이제 5개 슬라이드 중 1・2・4번이 영상, 3・5번만 정지 이미지. 아직 커밋・푸시하지 않음.
+
+## 방금 그 영상은 3번 슬라이드용이었음 — 2번에서 빼서 3번으로 재배치 + 문구 변경 (2026-08-11, 같은 날 후속 요청)
+
+직전에 2번 슬라이드에 넣은 영상이 사실 3번 슬라이드용이었다는 정정. 파일을 옮기고 2번은 원래 이미지 상태로 되돌림.
+
+1. **영상 재배치 — 완료**: `public/videos/hero-slide-2.mp4` → `hero-slide-3.mp4`로 이름 변경(파일 이동, 재복사 아님). `data/heroSlides.js`에서 2번 슬라이드의 `video`・`duration` 필드 제거(이미지로 복귀), 3번 슬라이드에 동일하게 추가.
+2. **3번 슬라이드 문구 교체 — 완료**: "UX・UI 디자인・사용자 경험・편의성" 키워드로 3안(A: 사용자 경험까지 고려・B: 편의성 중심・C: 키워드 나열형) 제시, A안 채택. eyebrow `현업 멘토가 1:1로` → `사용자를 이해하는 디자인`, title `막히는 지점마다\n현업 디자이너가 직접 봐드립니다.` → `사용자 경험(UX)까지 고려한\nUI 디자인을 배웁니다.`로 변경(멘토링 주제에서 UX/UI 설계 역량 주제로 전환됨 — CTA・링크는 요청받지 않아 기존 그대로 유지: "강사진 소개 보기" → `/instructors`, 주제와는 다소 느슨하게 연결되지만 학원 소개 사이트 맥락에서는 무리 없음).
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 2번이 이미지로 복귀했는지, 3번이 영상+새 문구로 나오는지 확인 필요. 아직 커밋・푸시하지 않음.
+
+## 2번 슬라이드 영상 적용 + 5번 슬라이드 삭제 + 인디케이터를 클릭 가능한 점(dot)으로 교체 (2026-08-11, 같은 날 후속 요청)
+
+1. **2번 슬라이드 영상 적용 — 완료**: `reference/메인비주얼02(비디오).mp4`(진짜 2번용, 1280×720, 8.0초, 1.5MB)를 `public/videos/hero-slide-2.mp4`로 저장, `data/heroSlides.js` 2번에 `video`・`duration: 8000` 추가.
+2. **5번 슬라이드 삭제 — 완료**: `heroSlides.js` 배열에서 5번 항목(수료 후 취업・`/reviews`) 전체 제거, 더 이상 쓰이지 않는 `public/images/hero/slide-5.jpg` 삭제. `heroSlides`를 참조하는 곳이 `HeroSlider.jsx` 하나뿐인 걸 확인해 다른 곳에 영향 없음. 이제 슬라이드 4개(1・2・3・4)이며 1・2・3・4 전부 영상.
+3. **"1 / 5" 텍스트 카운터 → 클릭 가능한 점(dot) 인디케이터로 교체 — 완료**: 사용자가 참고 이미지로 보여준 "활성 슬라이드는 넓은 pill, 나머지는 작은 원" 스타일을 적용. `HeroSlider.jsx`에 `hero-slider__dots`(각 점은 `goTo(i)`를 호출하는 버튼, `role="tablist"`/`role="tab"`/`aria-selected`로 접근성 처리) 추가, 기존 `hero-slider__count` span 제거. 위치는 기존과 동일하게 우측 하단 컨트롤 바(재생/정지 버튼 옆) 유지 — 참고 이미지처럼 이미지 아래 별도 흰색 바로 분리하지는 않음(요청받지 않아 기존 레이아웃 유지, 필요하면 조정 가능).
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 2번 슬라이드 영상, 슬라이드가 4개로 줄었는지, 점 인디케이터를 클릭해서 슬라이드 이동이 되는지, 현재 슬라이드 점이 넓은 pill로 표시되는지 확인 필요. 아직 커밋・푸시하지 않음.
+
+## 영상 위아래 잘림 수정 — object-fit: cover → contain (2026-08-11, 같은 날 후속 요청)
+
+영상이 너무 크게 확대돼서 위아래가 잘린다는 피드백. 원인은 영상 원본 비율이 16:9(1280×720)인데, 배너 컨테이너는 그보다 훨씬 넓은 비율(가로 최대 1440px, 세로 500px)이라 `object-fit: cover`가 컨테이너 폭에 맞춰 영상을 과도하게 확대하면서 위아래를 크게 잘라내고 있었음.
+- `HeroSlider.css`의 `.hero-slider__video`를 `object-fit: cover` → `contain`으로 변경(영상 전체 프레임이 잘리지 않고 다 보이도록) + `background: #1c2321`(브랜드 톤 다크 그린) 추가 — contain을 쓰면 영상 좌우로 남는 여백(letterbox)이 생기는데, 그 여백을 흰 배경 대신 다른 슬라이드들과 톤이 맞는 어두운 색으로 채움.
+- `npm run build` 통과. dev 서버(`localhost:5173`)에서 영상 슬라이드(1・2・3・4번) 전체가 잘리지 않고 다 보이는지, 좌우 여백 색이 자연스러운지 확인 필요. 아직 커밋・푸시하지 않음.
+
+## 영상 밝기 보정 + 슬라이드 전환 시 영상 처음부터 재생 + 자동 전환을 영상 종료 시점 기준으로 변경 (2026-08-11, 같은 날 후속 요청)
+
+1. **영상 밝기 보정 — 완료**: 영상이 전체적으로 어둡다는 피드백. ffmpeg 없이 픽셀 단위로 원본을 재인코딩하기보다, `HeroSlider.css`의 `.hero-slider__video`에 `filter: brightness(1.2)`를 추가해 브라우저 렌더링 단계에서 밝기만 보정(원본 파일은 그대로 두고 화면에 표시될 때만 밝게). 너무 밝거나 계속 어둡게 느껴지면 배율(현재 1.2)을 조정하면 됨.
+2. **슬라이드 전환 시 영상이 항상 처음부터 재생 — 완료**: 기존엔 5개(현재 4개) 영상이 전부 `autoPlay loop`로 마운트되자마자 백그라운드에서 계속 재생되고 있어서, 화살표/점 클릭으로 다시 돌아온 슬라이드는 영상이 중간부터 보였음. `videoRefs`(각 슬라이드 `<video>`에 대한 ref 배열)를 추가하고, `index`가 바뀔 때마다 새로 활성화된 슬라이드의 영상만 `currentTime = 0`으로 되돌려 재생하고 나머지는 `pause()`하는 effect를 추가. `<video>`의 `autoPlay`・`loop` 속성은 제거하고 재생 제어를 전부 이 effect로 일원화. 정지(❚❚) 버튼을 누르면 영상도 같이 멈추도록 함.
+3. **자동 전환 기준을 duration(ms) → 영상 종료 시점(ended)으로 변경 — 완료**: 지금까지는 영상 길이를 `duration` 필드에 수동으로 맞춰 넣어야 했는데(영상이 바뀔 때마다 다시 재보고 값 수정 필요), 이제 영상이 있는 슬라이드는 `<video>`의 `ended` 이벤트가 발생하는 시점에 자동으로 다음 슬라이드로 넘어가도록 변경(영상이 없는 슬라이드만 기존처럼 `duration` 타이머 사용, 기본값 5000ms). `heroSlides.js`의 `duration: 8000`은 4개 슬라이드 전부 영상이라 더 이상 쓰이지 않아 전부 제거하고 주석도 갱신.
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 영상이 이전보다 밝게 보이는지, 화살표・점으로 슬라이드를 오갈 때 영상이 항상 처음부터 시작되는지, 정지 버튼이 영상도 같이 멈추는지, 영상이 끝나는 시점에 정확히 다음 슬라이드로 넘어가는지 직접 확인 필요. 아직 커밋・푸시하지 않음.
+
+## 헤더 배경 살짝 색 입힘 + 플로팅 상담 버튼 말풍선 힌트 + 테마 색상 의견 (2026-08-11, 같은 날 후속 요청)
+
+1. **상단 헤더 배경 — 완료**: 순백(`var(--color-card)`, `#ffffff`)이라 페이지 배경(`--color-bg`, `#f7f8f6`)과 거의 구분이 안 되던 문제. `Header.css`의 `.site-header` 배경을 브랜드 그린을 옅게 섞은 `#eef5f1`로 변경.
+2. **우측 하단 플로팅 상담 버튼에 말풍선 힌트 추가 — 완료**: 버튼이 눈에 잘 안 띈다는 피드백으로, "상담하기" 말풍선이 8초 주기로 한 번씩(약 2초간) 나타났다 사라지도록 CSS `@keyframes` 애니메이션 추가(JS 상태 없이 순수 CSS로 무한 반복 — 늘 떠있으면 거슬리니 간헐적으로만 노출). 버튼 왼쪽에 꼬리 달린 흰색 말풍선으로 표시, 메뉴가 열려있을 때는 `.floating-consult[open]` 선택자로 숨김.
+3. **테마 색상 2가지로 바꾸는 것에 대한 의견 — 제시만 함(구현 안 함)**: 완전히 새 색상을 추가하기보다, 이미 사이트 곳곳(플로팅 버튼, 헤더 드롭다운 상단 바)에 포인트로 쓰이고 있는 골드/앰버(`#f5b83d`)를 정식 보조 색상으로 승격시켜 "딥그린 + 골드" 2색 조합으로 다듬는 방향을 추천함 — 이미 검증된 색이라 리스크・비용이 적음. 완전 새 색(블루/틸 등)은 더 신선하지만 그린 톤이 이미 배지・버튼・그라디언트 전반에 쓰이고 있어 손볼 범위가 훨씬 큼. 사용자 결정 대기 중.
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 헤더 배경 톤, 플로팅 버튼의 말풍선이 주기적으로 나타나는지 확인 필요. 아직 커밋・푸시하지 않음.
+
+## 테마 색상 "딥그린 + 골드" 2색 적용 (2026-08-11, 같은 날 후속 요청)
+
+직전에 제시한 의견(완전 새 색보다 기존 골드 포인트를 정식 보조색으로 승격)대로 진행해달라는 요청.
+
+1. **`--color-accent`・`--color-accent-dark` 토큰 추가 — 완료**: `index.css`에 골드(`#f5b83d`・`#c17f16`) 공식 토큰 추가 + 재사용 가능한 `.btn--accent` 유틸리티 클래스 추가(플로팅 상담 버튼에 이미 쓰이던 것과 동일한 그라디언트 스타일, 텍스트는 골드 배경에 대비가 좋은 다크 컬러).
+2. **적용 범위는 "마케팅성 CTA"로 한정 — 완료**: 지원・로그인・제출 같은 기능적 버튼은 그대로 그린 유지(사이트 전체의 기본 액션 색은 안 건드림), "여기를 눌러주세요"형 강조 버튼 2곳만 골드로 교체:
+   - `BottomCta`(페이지 하단 "지금 상담 신청하기" 배너) — 기존엔 그린 배경 위에 흰 버튼이었는데, `btn--primary` → `btn--accent`로 교체해 흰색 대신 실제 색이 있는 골드 버튼으로.
+   - `HeroSlider`의 각 슬라이드 CTA 버튼 — 기존 반투명 유리 버튼에서 골드 채움 버튼으로 교체, 배너에서 가장 눈에 띄는 자리라 duotone 효과가 가장 잘 드러남.
+3. **나머지는 그대로 — 의도적으로 손 안 댐**: 배지・폼 버튼・관리자 화면 등 그린을 쓰는 나머지 UI는 전부 유지. 리스크를 낮추기 위해 이번엔 딱 2곳만 우선 적용, 반응 보고 확대할지 결정하면 됨.
+- `npm run lint`(기존 무관 warning 7개만) + `npm run build` 통과. dev 서버(`localhost:5173`)에서 메인 히어로 슬라이더 CTA 버튼과 페이지 하단 "지금 상담 신청하기" 버튼이 골드로 바뀌었는지, 다른 페이지의 초록 버튼들은 그대로인지 확인 필요. 아직 커밋・푸시하지 않음.

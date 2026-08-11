@@ -6,6 +6,7 @@
 }
 
 .floating-consult__button {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,6 +40,58 @@
   object-fit: contain;
   /* 검정 라인 아이콘을 딥그린 배경 위에서 보이도록 흰색으로 반전 */
   filter: brightness(0) invert(1);
+}
+
+/* 버튼이 눈에 잘 안 띈다는 피드백 — 말풍선이 몇 초마다 한 번씩 나타났다
+   사라지길 반복해서 시선을 끈다(항상 떠 있으면 거슬려서 간헐적으로만). */
+.floating-consult__bubble {
+  position: absolute;
+  right: calc(100% + 0.6rem);
+  top: 50%;
+  padding: 0.45em 0.85em;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(28, 35, 33, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  animation: floating-consult-bubble 8s ease-in-out infinite;
+}
+
+.floating-consult__bubble::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: #fff;
+}
+
+@keyframes floating-consult-bubble {
+  0%,
+  55% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(6px);
+  }
+  65%,
+  85% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+  95%,
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(6px);
+  }
+}
+
+/* 메뉴가 열려있을 때는 말풍선을 숨긴다 */
+.floating-consult[open] .floating-consult__bubble {
+  display: none;
 }
 
 .floating-consult__menu {

@@ -5,6 +5,11 @@
   --color-text: #1c2321;
   --color-primary: #1f6650;
   --color-primary-dark: #164c3c;
+  /* 보조 컬러(포인트) — 플로팅 상담 버튼 등 일부에 이미 쓰이던 골드를
+     정식 2번째 테마 색으로 승격. 기능적인 버튼(지원・로그인・제출 등)은 계속
+     그린을 쓰고, "여기 봐주세요" 성격의 마케팅성 CTA에만 골드를 쓴다. */
+  --color-accent: #f5b83d;
+  --color-accent-dark: #c17f16;
 
   /* 상태 뱃지 색상 */
   --color-badge-waiting-bg: #e5e7eb;
@@ -160,4 +165,21 @@ img {
 
 .btn--secondary:active {
   transform: translateY(0);
+}
+
+.btn--accent {
+  background: linear-gradient(135deg, var(--color-accent), #d99a1f 60%, var(--color-accent-dark));
+  color: var(--color-text);
+  box-shadow: 0 4px 16px rgba(217, 154, 31, 0.35);
+}
+
+.btn--accent:hover {
+  background: linear-gradient(135deg, #d99a1f, var(--color-accent-dark) 60%, #a8690f);
+  box-shadow: 0 6px 18px rgba(217, 154, 31, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn--accent:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(217, 154, 31, 0.35);
 }

@@ -14,7 +14,7 @@ function BottomCta() {
           />
           아직 고민 중이신가요? 지금 바로 상담 신청하고 궁금한 점을 확인하세요.
         </p>
-        <Link className="btn btn--primary" to="/consultation">
+        <Link className="btn btn--accent" to="/consultation">
           지금 상담 신청하기
         </Link>
       </div>

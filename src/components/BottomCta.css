@@ -34,12 +34,6 @@
   filter: brightness(0) invert(1);
 }
 
-.bottom-cta .btn--primary {
-  background: #fff;
-  color: var(--color-primary);
+.bottom-cta .btn--accent {
   flex-shrink: 0;
-}
-
-.bottom-cta .btn--primary:hover {
-  background: rgba(255, 255, 255, 0.85);
 }

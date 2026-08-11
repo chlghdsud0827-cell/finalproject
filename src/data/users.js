@@ -10,10 +10,10 @@ export const mockUsers = [
   },
   // 민지는 지원/상담 이력이 전혀 없는 백지 상태 계정이라, 마이페이지 "내 멘토" 등
   // 이미 진행 중인 상태를 보여주는 화면을 확인하려면 별도 계정이 필요해서 추가함.
-  // 국비 과정 합격(confirmed) + 은채 멘토와 상담 진행 중(data/applications.js・
-  // data/consultations.js에 실제 Supabase 계정 id로 시드 연결됨 — 이 배열의
+  // 국비 과정 합격(confirmed) + 은채 멘토와 상담 진행 중(Supabase academy.applications・
+  // academy.consultations 테이블에 실제 계정 id로 시드 연결됨) — 이 배열의
   // id/password는 더 이상 로그인에 쓰이지 않고, 아직 mock 데이터로 남아있는
-  // 지원・상담・문의 화면에서 이름을 표시할 때만 참조된다).
+  // 문의・커뮤니티 화면에서 이름을 표시할 때만 참조된다.
   {
     id: 'user-yuna',
     email: 'yuna@example.com',
