@@ -131,6 +131,7 @@
   color: #fff;
   font-weight: 700;
   font-size: 1rem;
+  transition: color 0.4s ease;
 }
 
 .journey-graph__step-desc {
@@ -139,6 +140,14 @@
   font-size: 0.8125rem;
   white-space: pre-line;
   line-height: 1.5;
+  transition: color 0.4s ease;
+}
+
+/* 모바일 전용 세로 타임라인 배경선・채움선 — top/height는 JourneyGraph.jsx가
+   각 STEP 박스의 실제 좌표를 재서 인라인 스타일로 그린다(데스크톱에서는 숨김). */
+.journey-graph__mobile-track-base,
+.journey-graph__mobile-track-fill {
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -150,12 +159,42 @@
     display: none;
   }
 
+  /* 제목과 그래프 사이 빈 공간이 너무 커 보인다는 피드백 — 선(도입선 포함)의
+     길이는 그대로 두고(실측값이라 다른 구간과 항상 동일), 대신 이 바깥쪽
+     여백만 줄여서 그래프 전체가 제목에 조금 더 가까워지도록 한다. */
+  .journey-graph {
+    padding-top: 2rem;
+  }
+
+  .journey-graph__title {
+    margin-bottom: 1.5rem;
+  }
+
   /* 곡선 그래프 대신, 모바일에서는 세로선 + 점으로 하나로 쭉 이어진 타임라인을
      그린다. 데스크톱의 "호버한 단계까지 선이 채워지는" 진행 표시와 같은
-     역할을, 모바일에서는 스크롤로 각 단계에 도달할 때마다(JourneyGraph.jsx의
-     IntersectionObserver) 그 단계까지 순서대로 골드색으로 채워가는 방식으로
-     재현한다 — 아직 도달하지 않은 구간은 옅은 회색으로 남아있다가, 스크롤이
-     지나가는 단계마다 멈춰서 하나씩 채워진다. */
+     역할을, 모바일에서는 화면에 그래프가 보이는 동안 자동 재생 타이머로
+     실제 거리에 비례한 속도로 점을 하나씩 순서대로 채워가는 방식으로
+     재현한다(JourneyGraph.jsx). 선은 세그먼트별 근사치가 아니라 실측 좌표로
+     그리는 하나의 실제 DOM 요소라 처음부터 끝까지 완전히 이어져 있다. 첫 점
+     위 도입선 길이도 STEP01→02 간격을 그대로 재사용해 다른 구간과 항상
+     동일하다. */
+  .journey-graph__mobile-track-base,
+  .journey-graph__mobile-track-fill {
+    display: block;
+    position: absolute;
+    left: 0.375rem;
+    width: 3px;
+  }
+
+  .journey-graph__mobile-track-base {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .journey-graph__mobile-track-fill {
+    background: #f5b83d;
+    height: 0;
+  }
+
   .journey-graph__step {
     /* JSX에서 데스크톱 곡선용 left/top(%)이 인라인 스타일로 항상 붙어있는데,
        position:relative는 absolute와 마찬가지로 그 left/top 오프셋을 그대로
@@ -169,7 +208,11 @@
     width: 100%;
     text-align: left;
     margin-bottom: 1.5rem;
-    padding-left: 1.75rem;
+    /* 점(선)과 글 사이, 글과 화면 오른쪽 끝 사이에 각각 넉넉한 여백을 둬서
+       "선 옆에 좁게 붙은 텍스트"가 아니라 일정 비율만큼 떨어진 위치에 글이
+       오도록 한다(사용자가 스크린샷에 손그림으로 표시한 위치/비율). */
+    padding-left: max(2.25rem, 12%);
+    padding-right: 18%;
   }
 
   .journey-graph__step::before {
@@ -188,18 +231,18 @@
     background: #f5b83d;
   }
 
-  .journey-graph__step:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    left: 0.375rem;
-    top: 1.25rem;
-    bottom: -1.5rem;
-    width: 3px;
-    background: rgba(255, 255, 255, 0.25);
-    transition: background-color 0.4s ease;
+  /* 점에 도착한 STEP은 배지・제목・본문 색도 함께 강조해, "그 단계에
+     도착했다"는 게 선・점뿐 아니라 글에서도 보이도록 한다. */
+  .journey-graph__step--reached .journey-graph__step-badge {
+    border-color: #f5b83d;
+    color: #f5b83d;
   }
 
-  .journey-graph__step--reached:not(:last-child)::after {
-    background: #f5b83d;
+  .journey-graph__step--reached .journey-graph__step-title {
+    color: #f5b83d;
+  }
+
+  .journey-graph__step--reached .journey-graph__step-desc {
+    color: rgba(255, 255, 255, 0.95);
   }
 }

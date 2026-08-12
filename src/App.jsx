@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
 import FloatingConsult from './components/FloatingConsult.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 import RequireAuth from './components/RequireAuth.jsx'
 import PagePlaceholder from './components/PagePlaceholder.jsx'
 import Home from './pages/Home.jsx'
@@ -34,6 +35,7 @@ import Admin from './pages/Admin.jsx'
 function App() {
   return (
     <>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
