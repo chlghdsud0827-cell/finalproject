@@ -61,6 +61,30 @@ export function CommunityProvider({ children }) {
 
   const getPost = useCallback((postId) => posts.find((p) => p.id === postId) ?? null, [posts])
 
+  const getMyPosts = useCallback(
+    () =>
+      currentUser
+        ? [...posts]
+            .filter((p) => p.authorId === currentUser.id)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        : [],
+    [posts, currentUser],
+  )
+
+  // 마이페이지 "내 활동"에서 쓰기 위해, 어느 글의 댓글인지(postId・postTitle)도
+  // 함께 붙여서 평탄화한다 — 댓글 자체는 게시글 상세 안에 중첩돼 있어 목록으로
+  // 보려면 이렇게 한 번 풀어줘야 한다.
+  const getMyComments = useCallback(() => {
+    if (!currentUser) return []
+    return posts
+      .flatMap((p) =>
+        p.comments
+          .filter((c) => c.authorId === currentUser.id)
+          .map((c) => ({ ...c, postTitle: p.title })),
+      )
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  }, [posts, currentUser])
+
   const createPost = useCallback(
     async (category, title, content) => {
       if (!currentUser) return
@@ -144,6 +168,8 @@ export function CommunityProvider({ children }) {
   const value = {
     getAllPosts,
     getPost,
+    getMyPosts,
+    getMyComments,
     createPost,
     addComment,
     canModify,

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 import { useApplications } from '../context/ApplicationContext.jsx'
 import { useConsultations } from '../context/ConsultationContext.jsx'
 import { useInquiries } from '../context/InquiryContext.jsx'
+import { useCommunity } from '../context/CommunityContext.jsx'
 import { courses } from '../data/courses.js'
 import { mentors } from '../data/mentors.js'
 import {
@@ -31,7 +32,7 @@ function applicantIdentity(applications) {
   if (applications.some((a) => a.status === 'waiting')) {
     return { label: '대기자', className: 'badge--waiting' }
   }
-  return { label: '지원자', className: 'badge--waiting' }
+  return { label: '일반회원', className: 'badge--waiting' }
 }
 const CONSULT_ACTIVE_STATUSES = ['matched', 'in_progress']
 
@@ -182,6 +183,66 @@ function MyMentorsSection() {
   )
 }
 
+function CommunityTab() {
+  const { getMyPosts, getMyComments } = useCommunity()
+  const posts = getMyPosts()
+  const comments = getMyComments()
+
+  if (posts.length === 0 && comments.length === 0) {
+    return (
+      <p className="mypage__empty">
+        아직 작성한 글・댓글이 없습니다. <Link to="/community">커뮤니티 가기</Link>
+      </p>
+    )
+  }
+
+  return (
+    <div className="mypage__community">
+      <section>
+        <h3 className="mypage__community-heading">내가 쓴 글 ({posts.length})</h3>
+        {posts.length === 0 ? (
+          <p className="mypage__empty">작성한 글이 없습니다.</p>
+        ) : (
+          <ul className="mypage__list">
+            {posts.map((p) => (
+              <li key={p.id} className="mypage__item">
+                <div>
+                  <Link className="mypage__title" to={`/community/${p.id}`}>
+                    {p.title}
+                  </Link>
+                  <p className="mypage__content">
+                    {p.category} · 댓글 {p.comments.length}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section>
+        <h3 className="mypage__community-heading">내가 쓴 댓글 ({comments.length})</h3>
+        {comments.length === 0 ? (
+          <p className="mypage__empty">작성한 댓글이 없습니다.</p>
+        ) : (
+          <ul className="mypage__list">
+            {comments.map((c) => (
+              <li key={c.id} className="mypage__item">
+                <div>
+                  <Link className="mypage__title" to={`/community/${c.postId}`}>
+                    {c.postTitle}
+                  </Link>
+                  <p className="mypage__content">{c.content}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  )
+}
+
 function InquiriesTab() {
   const { getMyInquiries } = useInquiries()
   const inquiries = getMyInquiries()
@@ -250,38 +311,48 @@ function MyPage() {
 
         {currentUser.role === 'user' && <MyMentorsSection />}
 
-        <div className="mypage__stat-grid">
-          <div className="mypage__stat-card">
-            <span className="mypage__stat-value">{appStats.confirmed}</span>
-            <span className="mypage__stat-label">지원 합격</span>
+        {/* 카드 8개가 각각 숫자 하나씩만 보여줘 항목이 많고 지저분해 보인다는
+            피드백 — 지원/상담/문의 3개 영역으로 묶어 카드 1개당 관련 상태를
+            한 줄에 모아 보여주는 방식으로 단순화. */}
+        <div className="mypage__status-grid">
+          <div className="mypage__status-card">
+            <h3 className="mypage__status-title">지원 현황</h3>
+            <ul className="mypage__status-items">
+              <li>
+                <strong>{appStats.confirmed}</strong>합격
+              </li>
+              <li>
+                <strong>{appStats.waiting}</strong>대기중
+              </li>
+              <li>
+                <strong>{appStats.cancelled}</strong>취소
+              </li>
+            </ul>
           </div>
-          <div className="mypage__stat-card">
-            <span className="mypage__stat-value">{appStats.waiting}</span>
-            <span className="mypage__stat-label">지원 대기중</span>
+          <div className="mypage__status-card">
+            <h3 className="mypage__status-title">상담 현황</h3>
+            <ul className="mypage__status-items">
+              <li>
+                <strong>{consultStats.active}</strong>진행중
+              </li>
+              <li>
+                <strong>{consultStats.requested}</strong>배정대기
+              </li>
+              <li>
+                <strong>{consultStats.completed}</strong>완료
+              </li>
+            </ul>
           </div>
-          <div className="mypage__stat-card">
-            <span className="mypage__stat-value">{appStats.cancelled}</span>
-            <span className="mypage__stat-label">지원 취소</span>
-          </div>
-          <div className="mypage__stat-card">
-            <span className="mypage__stat-value">{consultStats.active}</span>
-            <span className="mypage__stat-label">상담 진행중</span>
-          </div>
-          <div className="mypage__stat-card">
-            <span className="mypage__stat-value">{consultStats.requested}</span>
-            <span className="mypage__stat-label">상담 배정대기</span>
-          </div>
-          <div className="mypage__stat-card">
-            <span className="mypage__stat-value">{consultStats.completed}</span>
-            <span className="mypage__stat-label">상담 완료</span>
-          </div>
-          <div className="mypage__stat-card">
-            <span className="mypage__stat-value">{inquiryStats.pending}</span>
-            <span className="mypage__stat-label">문의 답변대기</span>
-          </div>
-          <div className="mypage__stat-card">
-            <span className="mypage__stat-value">{inquiryStats.answered}</span>
-            <span className="mypage__stat-label">문의 답변완료</span>
+          <div className="mypage__status-card">
+            <h3 className="mypage__status-title">문의 현황</h3>
+            <ul className="mypage__status-items">
+              <li>
+                <strong>{inquiryStats.pending}</strong>답변대기
+              </li>
+              <li>
+                <strong>{inquiryStats.answered}</strong>답변완료
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -313,11 +384,21 @@ function MyPage() {
           >
             문의 내역
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'community'}
+            className={`mypage__tab ${tab === 'community' ? 'mypage__tab--active' : ''}`}
+            onClick={() => setTab('community')}
+          >
+            커뮤니티
+          </button>
         </div>
 
         {tab === 'applications' && <ApplicationsTab />}
         {tab === 'consultations' && <ConsultationsTab />}
         {tab === 'inquiries' && <InquiriesTab />}
+        {tab === 'community' && <CommunityTab />}
       </div>
     </main>
   )
