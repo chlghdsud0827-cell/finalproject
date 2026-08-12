@@ -1322,3 +1322,8 @@ react-router는 SPA 라우팅이라 브라우저 기본 스크롤 초기화가 �
 3. **`index.html` 갱신 — 완료**: `<link rel="icon">`을 새 PNG로 교체, `<link rel="apple-touch-icon">` 신규 추가. 더 이상 안 쓰는 `favicon.svg` 삭제.
 - `npm run build` 통과, `dist/`에 두 파일 포함 확인, 로컬 서버에서 두 파일 200 응답 확인.
 - 커밋 `ee5bbf6`(`feat: 파비콘을 메인 로고로 교체`) → GitHub `main` 푸시 완료. `vercel deploy --prod` 첫 시도에 바로 성공 — https://ui-ux-course-site.vercel.app 배포 완료, 파비콘 응답까지 확인(200 OK).
+
+## 파비콘이 너무 확대돼서 잘려 보이는 문제 수정 (2026-08-12, 같은 날 후속 요청)
+
+방금 적용한 "꽉 채운 크롭" 버전이 실제로 보니 너무 확대돼서 로고 일부가 잘린 것처럼 보인다는 피드백. 애플 터치 아이콘과 동일하게 로고 전체가 잘리지 않는 여백(레터박스) 버전으로 `favicon.png`를 다시 생성 — 크기는 조금 작아 보여도 잘리는 것보다 낫다고 판단.
+- `npm run build` 통과.
