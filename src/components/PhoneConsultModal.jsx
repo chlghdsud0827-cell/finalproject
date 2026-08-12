@@ -1,13 +1,31 @@
+import { useState } from 'react'
 import { contactInfo } from '../data/contactInfo.js'
+import { useCallbackRequests } from '../context/CallbackContext.jsx'
 import './PhoneConsultModal.css'
 
 function PhoneConsultModal({ dialogRef }) {
+  const { createCallbackRequest } = useCallbackRequests()
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [content, setContent] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+
   function close() {
     dialogRef.current?.close()
   }
 
   function handleBackdropClick(e) {
     if (e.target === dialogRef.current) close()
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (!name.trim() || !phone.trim()) return
+    createCallbackRequest(name.trim(), phone.trim(), content.trim())
+    setName('')
+    setPhone('')
+    setContent('')
+    setSubmitted(true)
   }
 
   return (
@@ -43,6 +61,44 @@ function PhoneConsultModal({ dialogRef }) {
             </li>
           ))}
         </ul>
+
+        <div className="phone-consult-modal__divider">
+          <span>또는</span>
+        </div>
+
+        {submitted ? (
+          <p className="phone-consult-modal__result">
+            신청이 접수됐습니다. 남겨주신 연락처로 담당자가 연락드릴게요.
+          </p>
+        ) : (
+          <form className="phone-consult-modal__form" onSubmit={handleSubmit}>
+            <p className="phone-consult-modal__form-desc">
+              지금 통화하기 어려우신가요? 번호를 남겨주시면 저희가 먼저 연락드립니다.
+            </p>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="이름"
+              required
+            />
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="연락처 (010-0000-0000)"
+              required
+            />
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              rows={2}
+              placeholder="문의 내용 (선택)"
+            />
+            <button className="btn btn--secondary" type="submit">
+              연락 요청하기
+            </button>
+          </form>
+        )}
       </div>
     </dialog>
   )
