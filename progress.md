@@ -1312,3 +1312,12 @@ react-router는 SPA 라우팅이라 브라우저 기본 스크롤 초기화가 �
 4. **테스트 데이터**: 이번 테스트로 만든 콜백 신청 2건("콜백테스트 [타임스탬프]")은 `callback_requests`에 삭제(DELETE) 권한 정책이 없어(다른 테이블과 동일한 패턴) 삭제하지 못하고 남아있음 — 내용상 무해함.
 - `npm run lint`(기존 무관 warning 7개) + `npm run build` 통과.
 - 커밋 `cb029e6`(`feat: 비회원 콜백 신청 폼 연결`) → GitHub `main` 푸시 완료. `vercel deploy --prod` 첫 시도에 바로 성공 — https://ui-ux-course-site.vercel.app 배포 완료, 접속 확인(200 OK).
+
+## 웹 파비콘을 메인 로고로 변경 (2026-08-12, 같은 날 후속 요청)
+
+기존엔 Vite 기본 `favicon.svg`를 그대로 쓰고 있었는데, 헤더에 쓰이는 메인 로고(`public/logo-mark.png`, "U"+커서+"X" 마크)로 교체.
+
+1. **정사각형 크롭 방식 비교 후 결정 — 완료**: 원본이 316×200 비율이라 그대로는 파비콘에 못 씀. 여백 없이 꽉 채우는 방식(중앙 크롭)과 로고 전체가 잘리지 않게 여백을 채우는 방식(레터박스) 둘 다 만들어 64px로 비교한 결과, 파비콘은 실제로 아주 작게(16~32px) 보이는 용도라 크롭해서 큼직하게 보이는 쪽이 훨씬 또렷해서 채택. 반대로 애플 홈 화면 아이콘(더 크게 보임)은 로고가 하나도 안 잘리는 여백 버전으로 따로 만듦.
+2. **`sharp`로 이미지 처리 — 완료**(기존 관례대로 `npm install --no-save sharp`로 임시 설치 후 처리, 완료 후 `npm uninstall sharp`로 제거): `public/favicon.png`(32×32, 중앙 크롭), `public/apple-touch-icon.png`(180×180, 레터박스) 생성.
+3. **`index.html` 갱신 — 완료**: `<link rel="icon">`을 새 PNG로 교체, `<link rel="apple-touch-icon">` 신규 추가. 더 이상 안 쓰는 `favicon.svg` 삭제.
+- `npm run build` 통과, `dist/`에 두 파일 포함 확인, 로컬 서버에서 두 파일 200 응답 확인.
