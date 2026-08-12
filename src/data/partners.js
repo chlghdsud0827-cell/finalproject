@@ -1,4 +1,6 @@
-// 취업 연계 파트너사 placeholder — 실제 파트너사가 확정되면 로고 이미지·소개로 교체
+// 취업 연계 파트너사 placeholder — 실제 파트너사가 확정되면 로고 이미지·소개로 교체.
+// foundedYear・employeeCount・annualRevenue・location도 업종・회사 규모에 맞춰 만든
+// 가상의 수치(placeholder)이며, 실제 파트너사 확정 시 함께 교체 필요.
 export const partners = [
   {
     id: 1,
@@ -7,6 +9,10 @@ export const partners = [
     description: 'B2B 협업 툴을 만드는 스타트업입니다. UI/UX 디자이너 신입 채용을 정기적으로 진행합니다.',
     hiringFields: ['UI 디자이너', 'UX 리서처'],
     logo: '/images/partners/technovation.jpg',
+    foundedYear: 2019,
+    employeeCount: 45,
+    annualRevenue: '80억원',
+    location: '서울 강남구',
   },
   {
     id: 2,
@@ -15,6 +21,10 @@ export const partners = [
     description: '온라인 커머스 플랫폼을 운영하며, 매 분기 주니어 디자이너 채용 연계를 진행합니다.',
     hiringFields: ['프로덕트 디자이너'],
     logo: '/images/partners/bridgeworks.jpg',
+    foundedYear: 2015,
+    employeeCount: 120,
+    annualRevenue: '350억원',
+    location: '서울 성동구',
   },
   {
     id: 3,
@@ -23,6 +33,10 @@ export const partners = [
     description: '다양한 클라이언트의 웹/앱 프로젝트를 진행하는 에이전시로, 실무 인턴십 연계 기회가 많습니다.',
     hiringFields: ['UI 디자이너', '인턴'],
     logo: '/images/partners/nextdesign.jpg',
+    foundedYear: 2012,
+    employeeCount: 30,
+    annualRevenue: '45억원',
+    location: '서울 마포구',
   },
   {
     id: 4,
@@ -31,6 +45,10 @@ export const partners = [
     description: '모바일 게임 UI를 전문으로 하는 스튜디오입니다. 포트폴리오 기반 수시 채용을 진행합니다.',
     hiringFields: ['게임 UI 디자이너'],
     logo: '/images/partners/pixelcraft.jpg',
+    foundedYear: 2017,
+    employeeCount: 60,
+    annualRevenue: '150억원',
+    location: '서울 강남구',
   },
   {
     id: 5,
@@ -39,6 +57,10 @@ export const partners = [
     description: '금융 서비스 앱을 만드는 핀테크 기업으로, UX 리서치 역량을 우대합니다.',
     hiringFields: ['UX 디자이너', 'UX 리서처'],
     logo: '/images/partners/studioon.jpg',
+    foundedYear: 2018,
+    employeeCount: 85,
+    annualRevenue: '200억원',
+    location: '서울 영등포구',
   },
   {
     id: 6,
@@ -47,5 +69,9 @@ export const partners = [
     description: '헬스케어 플랫폼을 운영하며, 디자인 시스템 구축 경험이 있는 주니어를 선호합니다.',
     hiringFields: ['프로덕트 디자이너'],
     logo: '/images/partners/makerslab.jpg',
+    foundedYear: 2016,
+    employeeCount: 70,
+    annualRevenue: '120억원',
+    location: '경기 성남시 분당구',
   },
 ]

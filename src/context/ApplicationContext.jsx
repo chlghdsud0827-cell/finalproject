@@ -30,9 +30,13 @@ export function ApplicationProvider({ children }) {
     }
   }, [])
 
+  // currentUser도 의존성에 넣어야 한다 — Supabase 세션 복원은 비동기라, 로그인된
+  // 상태로 새로고침해도 이 effect가 세션 복원 완료 전에 먼저 실행되면 RLS(select
+  // to authenticated)가 막아 빈 배열을 그대로 캐싱해버린다. currentUser가 null→
+  // 실제 값으로 바뀌는 순간 한 번 더 조회되도록 해서 이 레이스를 없앤다.
   useEffect(() => {
     refetch()
-  }, [refetch])
+  }, [refetch, currentUser])
 
   const getConfirmedCount = useCallback(
     (courseId) =>

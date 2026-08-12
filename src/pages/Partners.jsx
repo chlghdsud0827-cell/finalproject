@@ -31,6 +31,10 @@ function Partners() {
               <div className="partners__body">
                 <span className="partners__industry">{partner.industry}</span>
                 <h3 className="partners__name">{partner.name}</h3>
+                <p className="partners__meta">
+                  설립 {partner.foundedYear}년 · 사원 {partner.employeeCount}명 · 연매출{' '}
+                  {partner.annualRevenue} · {partner.location}
+                </p>
                 <p className="partners__desc">{partner.description}</p>
                 <ul className="partners__fields">
                   {partner.hiringFields.map((field) => (

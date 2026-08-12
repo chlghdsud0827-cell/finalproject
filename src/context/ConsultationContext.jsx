@@ -34,9 +34,12 @@ export function ConsultationProvider({ children }) {
     }
   }, [])
 
+  // currentUser도 의존성에 넣어야 한다 — ApplicationContext와 동일한 이유(Supabase
+  // 세션 복원이 끝나기 전에 이 effect가 먼저 실행되면 RLS가 막아 빈 배열이 그대로
+  // 캐싱됨) — currentUser가 바뀌는 순간 한 번 더 조회되도록 해서 레이스를 없앤다.
   useEffect(() => {
     refetch()
-  }, [refetch])
+  }, [refetch, currentUser])
 
   const getMentorLoad = useCallback(
     (mentorId) =>

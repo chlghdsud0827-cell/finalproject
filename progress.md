@@ -1194,3 +1194,56 @@ react-router는 SPA 라우팅이라 브라우저 기본 스크롤 초기화가 �
 - 커밋 `7c42192`(`feat: 커뮤니티 Supabase 연결 + 여정 그래프 실측 좌표 재설계 + 스크롤-투-탑`) → GitHub `main` 푸시 완료.
 - `vercel deploy --prod`: 첫 시도 `Not authorized`(기존에도 반복된 일시적 오류) → 재시도에서 성공. https://ui-ux-course-site.vercel.app 배포 완료, 접속 확인(200 OK).
 - 커뮤니티 Supabase 마이그레이션(0008・0009)은 이번 세션 중 사용자가 이미 대시보드에서 실행 완료, 배포된 사이트에도 그대로 반영됨.
+
+## 채용연계 파트너사 카드에 회사 정보 보강 (2026-08-12, 같은 날 후속 요청)
+
+"연매출액・사원수 같은 정보를 추가하면 좋겠다, 더 넣을 게 있으면 제안해달라"는 요청 — 기본 회사 정보(설립연도・사원수・연매출액・근무지) 외에 초봉/연봉 범위・근무형태/복지・인턴 전환 여부・홈페이지 링크도 제안했으나, 사용자가 "기본 회사 정보"만 선택.
+
+1. **`data/partners.js`에 필드 추가 — 완료**: 6개 파트너사 전부에 `foundedYear`(설립연도)・`employeeCount`(사원수)・`annualRevenue`(연매출액)・`location`(근무지) 추가 — 업종・기존 소개 문구와 자연스럽게 어울리는 규모로 가상의 수치 작성(에이전시=소규모, 커머스/핀테크=대규모 등). 다른 placeholder 수치들과 동일하게 실제 파트너사 확정 시 교체 필요.
+2. **`Partners.jsx`・`Partners.css` — 완료**: 회사명 아래, 소개글 위에 "설립 2019년 · 사원 45명 · 연매출 80억원 · 서울 강남구" 형태의 메타 정보 줄 추가(작은 글씨・톤다운 색상으로 소개글과 위계 구분).
+- `npm run lint`(기존 무관 warning 7개) + `npm run build` 통과. Playwright로 데스크톱・모바일 스크린샷 확인(레이아웃 정상, 콘솔 에러 없음), 확인 후 즉시 제거. 아직 커밋・푸시하지 않음.
+
+## 문의 게시판 Supabase 연결 + 커뮤니티 글/댓글 수정・삭제 기능 추가 (2026-08-12, 같은 날 후속 요청)
+
+1. **문의 처리 방식 확인 — 완료(답변만)**: 회원이 문의를 남기면 `createInquiry`가 `reply: null` 상태로 목록에 추가되고, 본인은 `/inquiry`의 "내 문의 내역"에서만 볼 수 있음(다른 사람 문의는 비공개). 관리자가 `/admin` "문의 관리" 탭에서 1건짜리 답변을 등록하면 답변완료로 바뀜. 비회원은 이름・연락처・이메일로 남기고 나중에 재조회할 방법이 없어(로그인 계정이 없으므로) 담당자가 남긴 연락처로 직접 연락하는 방식.
+2. **메인 메뉴 클릭 시 서브메뉴만 열리는 것에 대한 의견 — 제시만 함(구현 안 함)**: `NavDropdown.jsx`는 `<details>/<summary>`라 `summary`(메인 메뉴 라벨) 클릭은 원래 "펼치기/접기" 토글이지 링크가 아님 — 각 대분류(교육과정/소통공간/학원안내)마다 별도 허브 페이지를 만드는 건, 이미 하위 메뉴・푸터에 있는 링크를 다시 나열하는 정도라 실제 정보량 증가 없이 유지보수 대상만 늘어날 수 있어 신중한 편을 추천. 원한다면 "메뉴 라벨 클릭 시 그 그룹의 첫 하위 페이지로 바로 이동" 정도의 가벼운 대안도 가능.
+3. **문의 게시판 Supabase 연결 — 코드/마이그레이션 완료, DB 반영은 사용자 실행 필요**: 커뮤니티(4단계)와 같은 패턴으로 진행.
+   - **`supabase/migrations/0010_academy_inquiries.sql`(신규)**: `academy.inquiries` 테이블 생성(`user_id` nullable로 비회원 지원, `name`을 회원・비회원 모두 항상 저장해 관리자 화면에서 바로 이름 표시 가능하게 함 — 2・3단계와 동일한 관례). 조회는 로그인 회원만(마이페이지・관리자 전용 화면이라 커뮤니티처럼 `anon` select는 불필요), 등록은 `anon`도 가능(비회원 문의), 답변(수정)은 로그인 회원 전체 허용(기존 관례와 동일한 단순화).
+   - **`supabase/migrations/0011_academy_inquiries_seed.sql`(신규)**: 기존 `src/data/inquiries.js`의 seed 문의 6건을 계정 없는 더미로 이관(원본의 가짜 userId는 실제 계정이 아니었어서, 이관하며 표시용 이름을 새로 부여).
+   - **`src/context/InquiryContext.jsx` 전면 교체**: `useState(mock)` → Supabase(`select`/`insert`/`update` + `refetch()`) 패턴, 기존 함수 시그니처(`createInquiry`/`getMyInquiries`/`getAllInquiries`/`replyToInquiry`) 그대로 유지해 `InquiryBoard.jsx`・`Admin.jsx`・`InquiryList.jsx` 전부 코드 변경 없이 동작.
+   - **`src/data/inquiries.js` 삭제**(다른 곳에서 더 이상 참조 안 함), **`Admin.jsx`의 `inquiryAuthorName`** 을 이제 항상 채워지는 `inquiry.name`을 우선 사용하도록 소폭 수정(기존엔 로그인 회원 문의일 때 `mockUsers` 배열에서 이름을 찾았는데, 실제 신규 가입 계정은 애초에 `mockUsers`에 없어 UUID가 그대로 노출되는 문제가 있었음 — 이번에 함께 해결됨).
+   - **아직 DB에 테이블 없음 직접 확인**(`inquiries` select 시도 → "Could not find the table" 에러) — **0010・0011을 Supabase 대시보드 SQL 에디터에서 순서대로 실행해야** 문의 등록・답변이 다시 정상 동작함.
+4. **커뮤니티 댓글/글 수정・삭제(본인 또는 관리자) — 코드/마이그레이션 완료, DB 반영은 사용자 실행 필요**:
+   - **`supabase/migrations/0012_academy_community_edit_delete.sql`(신규)**: `community_posts`・`community_comments`에 update/delete 정책 추가 — "본인 소유(author_id 일치)" 정책과 "관리자(profiles.role='admin')" 정책을 각각 추가해 OR로 합쳐지도록 함(0004와 동일한 원리).
+   - **`CommunityContext.jsx`**: `canModify(authorId)`(본인 또는 관리자 여부 판단) + `updatePost`・`deletePost`・`updateComment`・`deleteComment` 추가.
+   - **`CommunityPostDetail.jsx`**: 글 제목 옆・각 댓글 옆에 `canModify`일 때만 "수정"/"삭제" 텍스트 버튼 노출. 수정은 인라인 폼으로 전환(제목+본문 또는 댓글 내용), 삭제는 확인창 후 즉시 반영(글 삭제 시 `/community`로 이동, 댓글은 `on delete cascade`로 글 삭제 시 함께 정리됨). `CommunityPostDetail.css`에 관련 스타일 추가.
+   - **DB 미반영 상태 — 0012 마이그레이션 실행 전까지는 수정・삭제 버튼을 눌러도 RLS가 막아 실패함**(UI는 이미 배포 가능한 상태).
+- `npm run lint`(기존 무관 warning 7개) + `npm run build` 통과. 아직 커밋・푸시하지 않음 — **0010・0011・0012 세 마이그레이션을 순서대로 실행해주셔야** 문의 게시판과 커뮤니티 수정/삭제가 실제로 동작합니다.
+
+## 0010~0012 실행 후 재테스트 + 진짜 원인의 버그 발견・수정 + 학원 일정 Supabase 연결 (2026-08-12, 같은 날 후속 요청)
+
+사용자가 0010・0011・0012를 대시보드에서 실행 완료 후 "게시물 삭제는 되는데 댓글 수정/삭제가 안 된다"고 재보고. Playwright로 재현하며 원인을 추적.
+
+### 원인 파악 과정
+1. **새로 쓴 댓글은 수정/삭제 정상 동작** — 로그인 사용자가 방금 작성한 자기 댓글로 테스트하면 문제없음.
+2. **관리자로 시드(더미 작성자) 댓글을 열어보니 수정/삭제 버튼 자체가 안 보임** — RLS(0012)를 API로 직접 테스트해보니 관리자 권한으로 남의 댓글을 수정하는 것 자체는 100% 정상 동작(`community_comments_update_admin` 정책 정상). 즉 백엔드는 문제없고 **프론트엔드가 관리자 로그인 상태를 인식 못 하는 순간이 있었음**.
+3. **진짜 원인 발견**: `ApplicationContext`・`ConsultationContext`・`CallbackContext`・`InquiryContext`・`CommunityContext` 전부 `useEffect(() => { refetch() }, [refetch])` 형태로, **앱이 처음 켜질 때 딱 한 번만 데이터를 조회**하고 있었음. `refetch`는 `useCallback(..., [])`라 참조가 절대 안 바뀌니 이 effect는 사실상 "최초 마운트 1회"만 실행됨. 문제는 Supabase 로그인 세션 복원이 비동기라서, 이 최초 조회가 **세션 복원이 끝나기 전에** 먼저 실행되면 RLS(`select to authenticated`)가 막아서 빈 배열을 리턴하는데, 그 이후 세션이 복원돼도 **다시 조회하는 트리거가 없어 빈 배열이 그대로 굳어버림**. 마이페이지・관리자 대시보드 등 화면에 로그인 상태로 들어가도 데이터가 안 보이거나 늦게 보이는 문제가 잠재적으로 여러 화면에 있었던 것 — 문의 게시판에서 유독 도드라져 보인 이유는 방금 이관한 기능이라 처음으로 제대로 테스트해봤기 때문.
+4. **`CallbackContext.jsx`는 아예 `useAuth`를 쓰지도 않고 있었음**(콜백 신청 자체는 비회원도 가능해서 필요 없었는데, 조회는 관리자 전용이라 원래는 필요했음) — 이번에 추가.
+
+### 수정 내용
+- **5개 Context 전부**(`ApplicationContext`・`ConsultationContext`・`CallbackContext`・`InquiryContext`・`CommunityContext`) — 최초 조회 `useEffect`의 의존성 배열에 `currentUser`를 추가(`[refetch, currentUser]`)해서, 로그인 세션이 나중에 복원되거나 로그인/로그아웃이 일어날 때마다 자동으로 재조회되도록 수정. `CallbackContext.jsx`는 `useAuth` import・`currentUser` 추적 자체를 새로 추가.
+- **Playwright로 전체 플로우 재검증 — 6개 항목 전부 통과**: 관리자 화면에 남의 댓글 수정/삭제 버튼 노출 → 관리자가 남의 댓글 삭제 → 회원 문의 등록 후 "내 문의 내역" 노출 → 새로고침 후 유지 → 관리자 화면에 방금 등록한 문의가 보임 → 관리자 답변 등록 후 반영, 전부 정상.
+
+### 학원 일정(Schedule) Supabase 연결 — 다음 미완료 항목 진행
+1. **`supabase/migrations/0013_academy_schedule_events.sql`(신규)**: `academy.schedule_events` 테이블 생성. `/schedule` 페이지가 로그인 없이 보이는 공개 페이지라 select는 `anon`도 포함, 나머지는 로그인 회원 전체 허용(관리자 전용 화면이지만 다른 관리 테이블과 동일한 단순화).
+2. **`supabase/migrations/0014_academy_schedule_events_seed.sql`(신규)**: 기존 `src/data/schedule.js`가 `courses.js` 필드로 계산해두던 일정 20건(1~4기 모집・수업・수료식 등)을 실제 계산된 날짜값 그대로 DB에 이관. 관리자가 어떤 일정이든(계산되어 생성된 것 포함) 수정・삭제할 수 있는 기존 UI 동작과 맞추기 위해, 계산값 그대로를 "일반 데이터"로 취급해 전부 DB로 옮기는 방식을 택함(Community・Inquiry와 동일한 접근).
+3. **`src/context/ScheduleContext.jsx` 전면 교체**: `useState(seed)` → Supabase 패턴, 함수 시그니처(`getAllEvents`/`addEvent`/`updateEvent`/`deleteEvent`) 그대로 유지해 `Admin.jsx`・`Schedule.jsx` 코드 변경 없이 동작.
+4. **`src/data/schedule.js` 삭제**(더 이상 참조하는 곳 없음), `src/data/aboutContent.js`의 관련 주석도 새 출처(Supabase 테이블)를 가리키도록 갱신.
+- **아직 DB에 테이블 없음 직접 확인**(`schedule_events` select → "Could not find the table" 에러) — **0013・0014를 순서대로 실행해야** `/schedule` 페이지와 관리자의 일정 추가/수정/삭제가 실제로 동작함(실행 전까지는 일정이 안 보이거나 추가해도 사라짐).
+- `npm run lint`(기존 무관 warning 7개) + `npm run build` 통과. 아직 커밋・푸시하지 않음.
+
+## 0013~0014 실행 후 학원 일정 재테스트 + 전체 커밋・푸시・배포 (2026-08-12, 같은 날 후속 요청)
+
+사용자가 0013・0014 실행 완료 후 Playwright로 전체 플로우 재검증: 시드 일정이 `/schedule` 공개 페이지에 노출 → 관리자가 일정 추가 후 목록 노출 → 새로고침 후에도 유지 → 공개 페이지에도 반영 → 수정 반영 → 삭제 반영, 전부 통과(첫 시도에서 9월 날짜로 테스트해 "공개 페이지에 안 보임"으로 오판했었는데, `/schedule`이 월별 캘린더라 기본 화면이 2026년 8월로 고정돼 있어서였을 뿐 — 8월 날짜로 재확인해 실제 버그 아님을 확인).
+
+오늘 하루 동안 진행한 전체 작업(문의 게시판・커뮤니티 수정삭제・여러 Context의 세션-레이스 버그 수정・학원 일정 Supabase 연결 등)을 한 번에 커밋・푸시・배포.

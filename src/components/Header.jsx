@@ -79,7 +79,7 @@ function Header() {
             <NavDropdown key={group.label} label={group.label} items={group.items} />
           ))}
           {currentUser?.role === 'mentor' && <Link to="/mentor">멘토 대시보드</Link>}
-          {currentUser?.role === 'admin' && <Link to="/admin">관리자</Link>}
+          {currentUser?.role === 'admin' && <Link to="/admin">관리자 대시보드</Link>}
         </nav>
         <Link className="site-header__mypage" to="/mypage">
           마이페이지
@@ -162,7 +162,7 @@ function Header() {
         )}
         {currentUser?.role === 'admin' && (
           <Link className="site-header__drawer-extra" to="/admin" onClick={closeMobile}>
-            관리자
+            관리자 대시보드
           </Link>
         )}
 

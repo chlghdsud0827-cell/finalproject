@@ -1,26 +1,76 @@
-import { createContext, useContext, useState, useCallback } from 'react'
-import { scheduleEvents as initialScheduleEvents } from '../data/schedule.js'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { useAuth } from './AuthContext.jsx'
+import { supabase } from '../lib/supabaseClient.js'
 
 const ScheduleContext = createContext(null)
 
+function toEvent(row) {
+  return {
+    id: row.id,
+    title: row.title,
+    type: row.type,
+    courseId: row.course_id,
+    startDate: row.start_date,
+    endDate: row.end_date,
+  }
+}
+
 // 학원 일정(모집/수업/행사)을 관리자가 직접 추가・수정・삭제할 수 있도록 Context로 관리한다.
-// data/schedule.js의 초기값(과정별 모집・수업 기간 등)을 시드로 시작한다.
+// 초기값은 courses.js 기반으로 계산해둔 값을 supabase/migrations/0014로 시드해뒀다.
 export function ScheduleProvider({ children }) {
-  const [events, setEvents] = useState(initialScheduleEvents)
+  const { currentUser } = useAuth()
+  const [events, setEvents] = useState([])
+
+  // ApplicationContext와 동일한 패턴.
+  const refetch = useCallback(async () => {
+    const { data, error } = await supabase.from('schedule_events').select('*')
+    if (!error && data) {
+      setEvents(data.map(toEvent))
+    }
+  }, [])
+
+  useEffect(() => {
+    refetch()
+  }, [refetch, currentUser])
 
   const getAllEvents = useCallback(() => events, [events])
 
-  const addEvent = useCallback((event) => {
-    setEvents((prev) => [...prev, { ...event, id: `sch-custom-${Date.now()}` }])
-  }, [])
+  const addEvent = useCallback(
+    async (event) => {
+      const { error } = await supabase.from('schedule_events').insert({
+        title: event.title,
+        type: event.type,
+        course_id: event.courseId,
+        start_date: event.startDate,
+        end_date: event.endDate,
+      })
+      if (!error) await refetch()
+    },
+    [refetch],
+  )
 
-  const updateEvent = useCallback((id, updates) => {
-    setEvents((prev) => prev.map((e) => (e.id === id ? { ...e, ...updates } : e)))
-  }, [])
+  const updateEvent = useCallback(
+    async (id, updates) => {
+      const patch = {}
+      if (updates.title !== undefined) patch.title = updates.title
+      if (updates.type !== undefined) patch.type = updates.type
+      if (updates.courseId !== undefined) patch.course_id = updates.courseId
+      if (updates.startDate !== undefined) patch.start_date = updates.startDate
+      if (updates.endDate !== undefined) patch.end_date = updates.endDate
 
-  const deleteEvent = useCallback((id) => {
-    setEvents((prev) => prev.filter((e) => e.id !== id))
-  }, [])
+      const { error } = await supabase.from('schedule_events').update(patch).eq('id', id)
+      if (!error) await refetch()
+    },
+    [refetch],
+  )
+
+  const deleteEvent = useCallback(
+    async (id) => {
+      const { error } = await supabase.from('schedule_events').delete().eq('id', id)
+      if (!error) await refetch()
+    },
+    [refetch],
+  )
 
   const value = { getAllEvents, addEvent, updateEvent, deleteEvent }
 

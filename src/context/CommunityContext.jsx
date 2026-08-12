@@ -48,9 +48,11 @@ export function CommunityProvider({ children }) {
     }
   }, [])
 
+  // 커뮤니티 글 목록 자체는 비로그인도 볼 수 있어 이 레이스의 영향이 크진 않지만,
+  // 다른 Context들과 동일하게 currentUser 변화 시에도 재조회하도록 맞춘다.
   useEffect(() => {
     refetch()
-  }, [refetch])
+  }, [refetch, currentUser])
 
   const getAllPosts = useCallback(
     () => [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
@@ -89,7 +91,67 @@ export function CommunityProvider({ children }) {
     [currentUser, refetch],
   )
 
-  const value = { getAllPosts, getPost, createPost, addComment }
+  // 본인 글/댓글이거나 관리자면 수정・삭제할 수 있다(실제 허용 여부는
+  // Supabase RLS(0012 마이그레이션)가 최종적으로 판단 — 여기 canModify는
+  // UI에 수정・삭제 버튼을 보여줄지 결정하는 용도).
+  const canModify = useCallback(
+    (authorId) => !!currentUser && (currentUser.id === authorId || currentUser.role === 'admin'),
+    [currentUser],
+  )
+
+  const updatePost = useCallback(
+    async (postId, title, content) => {
+      const { error } = await supabase
+        .from('community_posts')
+        .update({ title, content })
+        .eq('id', postId)
+      if (!error) await refetch()
+      return !error
+    },
+    [refetch],
+  )
+
+  const deletePost = useCallback(
+    async (postId) => {
+      const { error } = await supabase.from('community_posts').delete().eq('id', postId)
+      if (!error) await refetch()
+      return !error
+    },
+    [refetch],
+  )
+
+  const updateComment = useCallback(
+    async (commentId, content) => {
+      const { error } = await supabase
+        .from('community_comments')
+        .update({ content })
+        .eq('id', commentId)
+      if (!error) await refetch()
+      return !error
+    },
+    [refetch],
+  )
+
+  const deleteComment = useCallback(
+    async (commentId) => {
+      const { error } = await supabase.from('community_comments').delete().eq('id', commentId)
+      if (!error) await refetch()
+      return !error
+    },
+    [refetch],
+  )
+
+  const value = {
+    getAllPosts,
+    getPost,
+    createPost,
+    addComment,
+    canModify,
+    updatePost,
+    deletePost,
+    updateComment,
+    deleteComment,
+  }
 
   return (
     <CommunityContext.Provider value={value}>{children}</CommunityContext.Provider>

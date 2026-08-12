@@ -55,10 +55,8 @@ function consultantStudentName(c) {
 
 // 로그인 후 작성한 문의는 계정 이름을, 비회원 문의는 작성 시 입력한 이름을 "(비회원)" 태그와 함께 보여준다.
 function inquiryAuthorName(inquiry) {
-  if (inquiry.userId) {
-    return mockUsers.find((u) => u.id === inquiry.userId)?.name ?? inquiry.userId
-  }
-  return `${inquiry.name ?? '비회원'} (비회원)`
+  const name = inquiry.name ?? mockUsers.find((u) => u.id === inquiry.userId)?.name ?? inquiry.userId
+  return inquiry.userId ? name : `${name} (비회원)`
 }
 
 function StatCard({ value, label, tone, onClick }) {

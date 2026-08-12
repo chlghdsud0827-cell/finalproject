@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { useAuth } from './AuthContext.jsx'
 import { supabase } from '../lib/supabaseClient.js'
 
 const CallbackContext = createContext(null)
@@ -16,6 +17,10 @@ function toCallbackRequest(row) {
 }
 
 export function CallbackProvider({ children }) {
+  // 신청(insert)은 로그인 여부와 무관하지만, 조회(select)는 관리자 전용 화면에서만
+  // 쓰여 RLS가 authenticated로 제한돼 있다 — currentUser를 추적해야 로그인 이후
+  // 재조회가 일어난다(아래 useEffect 주석 참고).
+  const { currentUser } = useAuth()
   const [requests, setRequests] = useState([])
 
   const refetch = useCallback(async () => {
@@ -25,9 +30,12 @@ export function CallbackProvider({ children }) {
     }
   }, [])
 
+  // currentUser도 의존성에 넣어야 한다 — Supabase 세션 복원이 끝나기 전에 이
+  // effect가 먼저 실행되면 RLS(select to authenticated)가 막아 빈 배열이 그대로
+  // 캐싱됨 — currentUser가 바뀌는 순간 한 번 더 조회되도록 해서 레이스를 없앤다.
   useEffect(() => {
     refetch()
-  }, [refetch])
+  }, [refetch, currentUser])
 
   // 로그인 여부와 무관하게 이름/연락처/문의 내용만으로 신청을 접수한다.
   const createCallbackRequest = useCallback(

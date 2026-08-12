@@ -20,9 +20,9 @@ export const missionValues = [
   },
 ]
 
-// 전체 연혁(/history 페이지에서 모두 노출). 날짜는 data/schedule.js의
-// nationalCourseHistory(1~3기 모집・수업・수료 실제 일정)와 어긋나지 않도록 맞춤 —
-// 두 데이터가 따로 관리되어 벌어지는 일이 없도록 이 배열이 유일한 출처.
+// 전체 연혁(/history 페이지에서 모두 노출). 날짜는 학원 일정(1~3기 모집・수업・수료
+// 실제 일정, academy.schedule_events 테이블 — 원래 data/schedule.js에 있던 계산값을
+// supabase/migrations/0014로 이관함)과 어긋나지 않도록 맞춤.
 // highlight: true인 항목만 About(학원소개) 페이지에 요약으로 노출된다.
 export const history = [
   {
