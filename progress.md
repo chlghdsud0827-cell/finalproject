@@ -1321,3 +1321,4 @@ react-router는 SPA 라우팅이라 브라우저 기본 스크롤 초기화가 �
 2. **`sharp`로 이미지 처리 — 완료**(기존 관례대로 `npm install --no-save sharp`로 임시 설치 후 처리, 완료 후 `npm uninstall sharp`로 제거): `public/favicon.png`(32×32, 중앙 크롭), `public/apple-touch-icon.png`(180×180, 레터박스) 생성.
 3. **`index.html` 갱신 — 완료**: `<link rel="icon">`을 새 PNG로 교체, `<link rel="apple-touch-icon">` 신규 추가. 더 이상 안 쓰는 `favicon.svg` 삭제.
 - `npm run build` 통과, `dist/`에 두 파일 포함 확인, 로컬 서버에서 두 파일 200 응답 확인.
+- 커밋 `ee5bbf6`(`feat: 파비콘을 메인 로고로 교체`) → GitHub `main` 푸시 완료. `vercel deploy --prod` 첫 시도에 바로 성공 — https://ui-ux-course-site.vercel.app 배포 완료, 파비콘 응답까지 확인(200 OK).
